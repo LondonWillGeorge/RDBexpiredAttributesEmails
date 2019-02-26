@@ -333,6 +333,9 @@ Public Function wordLetter(templateFile As String, bodyText As String) As Object
    
    ' 1 - read-only message still appears on execution of this line:
    ' it's on the desktop, why is it read-only?
+   Set wordLetter = objWord.Documents.Open(templateFile, Visible = False, ReadOnlyRecommended = False)
+   ' ReadonlyRecommended = False stops pop-up dialogue appearing every time this line executes! This is default property for Word docs maybe?
+   
 
    Set objSelection = objWord.Selection
 
