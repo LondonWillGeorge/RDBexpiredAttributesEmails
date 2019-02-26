@@ -326,6 +326,8 @@ Public Function wordLetter(templateFile As String, bodyText As String, endtext A
    
    ' Debug.Print ("wordLetter type is " + Str(VarType(wordLetter)))
    ' wordLetter returns as string type (8) here..
+   
+   ' TODO: Try setting objFont = objWord.Font as Selection may be not most stable according SO poster
 
    Set objSelection = objWord.Selection
    
