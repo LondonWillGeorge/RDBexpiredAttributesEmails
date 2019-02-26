@@ -317,18 +317,14 @@ Public Function wordLetter(templateFile As String, bodyText As String, endtext A
 
    Set objWord = CreateObject("Word.Application")
    
-   ' get rid of read only warning? 3 - added objWord. parent keyword, still r-o message
    objWord.Application.DisplayAlerts = False
 
    ' set visible false in parameters here?
    'Error at this line may have been due to not typing the input parameters before
 
-   'objWord.Application.Visible = False ' 2 - still read-only message
    
-   objWord.Application.ScreenUpdating = False ' 4 - still read-only message
+   objWord.Application.ScreenUpdating = False
    
-   ' 1 - read-only message still appears on execution of this line:
-   ' it's on the desktop, why is it read-only?
    Set wordLetter = objWord.Documents.Open(templateFile, Visible = False, ReadOnlyRecommended = False)
    ' ReadonlyRecommended = False stops pop-up dialogue appearing every time this line executes! This is default property for Word docs maybe?
    
