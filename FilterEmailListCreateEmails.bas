@@ -318,10 +318,6 @@ Public Function wordLetter(templateFile As String, bodyText As String, endtext A
    Set objWord = CreateObject("Word.Application")
    
    objWord.Application.DisplayAlerts = False
-
-   ' set visible false in parameters here?
-   'Error at this line may have been due to not typing the input parameters before
-
    
    objWord.Application.ScreenUpdating = False
    
@@ -343,7 +339,6 @@ Public Function wordLetter(templateFile As String, bodyText As String, endtext A
    ' this is necessary to update Word file before saving
    ' Without it, file will be blank!
    objWord.Application.ScreenUpdating = True
-   ' objWord.Application.Visible = True ' removed but still shows save dialogue
    
    ' SaveAs2 needs the FileFormat specified here as well as filepath to save. MS Docs refer FileFormat as optional
    ' but I'm guessing may be because wordLetter is string type object here? Something I don't understand about this fully..
