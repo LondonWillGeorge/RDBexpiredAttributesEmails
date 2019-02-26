@@ -295,9 +295,6 @@ cleanup:
     
 End Sub
 
-' Take in a string path for the template MS Word file
-' templateFile, text - pass the whole text string to add?
-
 ' original code
 ' https://excel-macro.tutorialhorizon.com/vba-excel-edit-and-save-an-existing-word-document/
 
@@ -305,7 +302,6 @@ End Sub
 ' https://stackoverflow.com/questions/22569182/writing-formatting-word-document-using-excel-vba
 
 ' https://docs.microsoft.com/en-us/office/vba/api/word.document
-
 
 Public Function wordLetter(templateFile As String, bodyText As String, endtext As String) As Object
 
@@ -348,10 +344,6 @@ Public Function wordLetter(templateFile As String, bodyText As String, endtext A
        objSelection.TypeText (endtext)
        
    End With
-
-
-   
-   
    
    ' this is necessary to update Word file before saving
    ' Without it, file will be blank!
