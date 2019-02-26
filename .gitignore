@@ -1,0 +1,22 @@
+## This is for project where I want to track VBA code changes, 
+## but not track changes in the Excel data itself
+
+*.tmp
+
+# Word temporary
+~$*.doc*
+
+# Word Auto Backup File
+Backup of *.doc*
+
+# Excel temporary
+~$*.xls*
+
+# Excel Backup File
+*.xlk
+
+#Excel files
+*.xlsm
+*.xls
+*.xlsb
+*.xlsx
