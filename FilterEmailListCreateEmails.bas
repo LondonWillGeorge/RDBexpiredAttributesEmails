@@ -318,9 +318,8 @@ Public Function wordLetter(templateFile As String, bodyText As String) As Object
    ' try here?
    ' objWord.Visible = False
    
-   ' get rid of read only warning?
-   Application.DisplayAlerts = False
    ' get rid of read only warning? 3 - added objWord. parent keyword, still r-o message
+   objWord.Application.DisplayAlerts = False
 
    ' set visible false in parameters here?
    'Error at this line may have been due to not typing the input parameters before
