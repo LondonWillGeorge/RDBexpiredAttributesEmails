@@ -326,7 +326,6 @@ Public Function wordLetter(templateFile As String, bodyText As String) As Object
    Set wordLetter = objWord.Documents.Open(templateFile, Visible = False) ' Filename = templateFile, Visible = False
 
    ' objWord.Visible = False ' True will show the Word doc don't want that as have to click close each time!
-   Debug.Print ("wordLetter type is " + Str(VarType(wordLetter)))
    'objWord.Application.Visible = False ' 2 - still read-only message
    objWord.Application.ScreenUpdating = False ' 4 - still read-only message
    
@@ -335,6 +334,8 @@ Public Function wordLetter(templateFile As String, bodyText As String) As Object
    Set wordLetter = objWord.Documents.Open(templateFile, Visible = False, ReadOnlyRecommended = False)
    ' ReadonlyRecommended = False stops pop-up dialogue appearing every time this line executes! This is default property for Word docs maybe?
    
+   ' Debug.Print ("wordLetter type is " + Str(VarType(wordLetter)))
+   ' wordLetter returns as string type (8) here..
 
    Set objSelection = objWord.Selection
 
