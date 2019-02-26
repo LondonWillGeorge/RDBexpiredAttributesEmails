@@ -328,13 +328,28 @@ Public Function wordLetter(templateFile As String, bodyText As String, endtext A
    ' wordLetter returns as string type (8) here..
 
    Set objSelection = objWord.Selection
+   
+   With objSelection.Font
+       .Bold = False
+       .colorIndex = wdBlack
+       .Name = "Verdana"
+       .Size = "11"
+       
+       objSelection.TypeText (bodyText)
+       
+       ' can change formatting for a uniform end text message
+       .Bold = True
+       .colorIndex = wdViolet ' not working apparently
+       ' doesnt work; object / properties confused I think - .TextColor.ForeColor.RGB = RGB(0, 100, 100)
+       .Size = "15"
+       
+       objSelection.TypeText (endtext)
+       
+   End With
 
-   objSelection.Font.Bold = True
-   ' objSelection.Font.Color = "black"
 
-   objSelection.Font.Size = "22"
-
-   objSelection.TypeText (bodyText)
+   
+   
    
    ' this is necessary to update Word file before saving
    ' Without it, file will be blank!
