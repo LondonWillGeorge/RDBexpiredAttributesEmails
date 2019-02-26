@@ -332,6 +332,7 @@ Public Function wordLetter(templateFile As String, bodyText As String) As Object
    Set objSelection = objWord.Selection
 
    objSelection.Font.Bold = True
+   ' objSelection.Font.Color = "black"
 
    objSelection.Font.Size = "22"
 
