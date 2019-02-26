@@ -20,3 +20,6 @@ Backup of *.doc*
 *.xls
 *.xlsb
 *.xlsx
+
+# Word standard 2019 doc format
+*.docx
