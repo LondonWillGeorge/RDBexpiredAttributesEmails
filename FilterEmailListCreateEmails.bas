@@ -320,6 +320,7 @@ Public Function wordLetter(templateFile As String, bodyText As String) As Object
    
    ' get rid of read only warning?
    Application.DisplayAlerts = False
+   ' get rid of read only warning? 3 - added objWord. parent keyword, still r-o message
 
    ' set visible false in parameters here?
    'Error at this line may have been due to not typing the input parameters before
@@ -327,7 +328,11 @@ Public Function wordLetter(templateFile As String, bodyText As String) As Object
 
    ' objWord.Visible = False ' True will show the Word doc don't want that as have to click close each time!
    Debug.Print ("wordLetter type is " + Str(VarType(wordLetter)))
+   'objWord.Application.Visible = False ' 2 - still read-only message
    objWord.Application.ScreenUpdating = False ' 4 - still read-only message
+   
+   ' 1 - read-only message still appears on execution of this line:
+   ' it's on the desktop, why is it read-only?
 
    Set objSelection = objWord.Selection
 
