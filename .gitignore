@@ -23,3 +23,9 @@ Backup of *.doc*
 
 # Word standard 2019 doc format
 *.docx
+
+# Images
+*.jpg
+*.jpeg
+*.gif
+*.bmp
