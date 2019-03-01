@@ -172,6 +172,18 @@ Sub CreateEmails_Click()
     objWordMessage.Quit
     
     Set objWordMessage = Nothing
+    
+    ' index 0 in paragraph array should now be subject line,
+    ' each underlined title or paragraph is separate item in array
+    
+'    For a = 0 To UBound(paragArray)
+'        Debug.Print ("no " + Str(a) + " is: " + paragArray(a))
+'    Next a
+    
+    ' on debugging, Word Quit execution hangs before break point execution,
+    ' have to manually end task in Task Manager for some reason to get to the break point?
+    
+    'Start processing the emails here:
     For Each cell In ActiveSheet.Columns("C").Cells.SpecialCells(xlCellTypeConstants)
         
         ' *** FOR TESTING, STOP AT ROW 4, COMMENT OUT LATER!!!! ****
