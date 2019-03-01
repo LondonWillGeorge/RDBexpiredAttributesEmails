@@ -4,7 +4,7 @@ Attribute VB_Name = "ListFolderNames"
 ' It should have been added already! But in case problem, add again from VBA Editor by clicking Tools menu
 ' Then References, then choosing Microsoft Scripting Runtime from the list.
 
-' NB Alternative of using Dir built-in VBA function doesn't seem work very easily,
+' NB Alternative to File System Object is using Dir built-in VBA function doesn't seem work very easily,
 ' plus someone on SO says it's silly anyway..
 Sub PasteColumnG_ListfromFolderNames()
 
