@@ -314,7 +314,7 @@ Public Function wordLetter(templateFile As String, bodyText As String, endtext A
 
    Dim objSelection
 
-   Set objWord = CreateObject("Word.Application")
+   Set objWord = CreateObject("Word.Application") ' NB this is NOT yet set to Nothing at the end, but still works...
    
    objWord.Application.DisplayAlerts = False
    
