@@ -138,6 +138,8 @@ Sub CreateEmails_Click()
 
     If Cells(2, 3) <> "" Then
     
+    ' Open Word object and file ONCE for the Message Body, and save the text in several variables, only one format type in each text variable.
+    ' Close it after variable text is saved. So we need to save the text variables BEFORE we start looping...
     Dim messagePath As String: messagePath = ThisWorkbook.path & "\MessageText.docx"
     
     Dim paragArray() As String
