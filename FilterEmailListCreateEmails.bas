@@ -166,6 +166,12 @@ Sub CreateEmails_Click()
     Next
     
     msgDoc.Close
+    
+    ' The .Quit line closes the Word process in Windows Task Manager - crucial!
+    ' Setting object to Nothing without this will still NOT end the Word Task
+    objWordMessage.Quit
+    
+    Set objWordMessage = Nothing
     For Each cell In ActiveSheet.Columns("C").Cells.SpecialCells(xlCellTypeConstants)
         
         ' *** FOR TESTING, STOP AT ROW 4, COMMENT OUT LATER!!!! ****
