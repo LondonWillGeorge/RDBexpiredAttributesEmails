@@ -148,7 +148,8 @@ attLen = ActiveSheet.Range("h10000").End(xlUp).Row
 
 tempName = ""
 ' For names in G column, remove (RGN (HCA (RMN right half text if there,
-' as this is not part of the name.
+' as this is not part of the name. This makes fuzzy matching easier as names
+' are then as similar as possible before the match loop runs.
 ' Do this here once only, not in any function called from loop
 For crunchoff = 2 To compLen
 
