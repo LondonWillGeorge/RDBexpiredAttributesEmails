@@ -144,8 +144,8 @@ Sub CreateEmails_Click()
     
     For Each cell In ActiveSheet.Columns("C").Cells.SpecialCells(xlCellTypeConstants)
         
-        ' *** FOR TESTING, STOP AT ROW 3, COMMENT OUT LATER!!!! ****
-        If cell.Row > 3 Then
+        ' *** FOR TESTING, STOP AT ROW 4, COMMENT OUT LATER!!!! ****
+        If cell.Row > 4 Then
             Exit For
         End If
         
