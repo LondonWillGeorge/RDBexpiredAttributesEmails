@@ -135,6 +135,8 @@ Sub CreateEmails_Click()
     On Error GoTo cleanup
 
     errorList = ""
+
+    If Cells(2, 3) <> "" Then
     
     ' Could build Dictionary on Column C names, with keys as the name, and values as the row number, might be more efficient.
     ' but fuzzy match problem remains so dictionary may not be much easier?
@@ -144,7 +146,6 @@ Sub CreateEmails_Click()
     
     'TODO: check if column C not blank and message an error stop the app if so?
     
-    If Cells(2, 3) <> "" Then
     
     For Each cell In ActiveSheet.Columns("C").Cells.SpecialCells(xlCellTypeConstants)
         
