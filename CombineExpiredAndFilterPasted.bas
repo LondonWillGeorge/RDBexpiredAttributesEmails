@@ -112,32 +112,6 @@ Sub CombineExpired_Click()
 End Sub
 
 Sub FilterPastedList_Click()
-' FuzzyPercent "Joanna Louise", "Lou Joan" = 0.189 , and if (Joan) is in brackets score is same
-' Lou Joan, Joanna Louise is 0.26, Joan, Joanna Louise is 0.35, Josephina, Joanna Louise is 0.16
-' For FuzzyPercent surnames: Baked, Baik is 0.4, Hari, Harrhy is 0.45, Archenna, Chenna is 0.25 but not likely i think!
-' Jake, Jain is 0.375, Delavega, Vega is 0.25, Vega, Delavega is 0.39!
-' --> Put LONGER name as String2
-' --> Do 0.2 or above on first part of name, and 0.35 on surname OR 0.5 on whole name
-
-' Resray is Result Array
-' C is Compare list array
-' O is Original combined list array
-
-' *** Maybe quicker just sort array at end remove duplicates!!!
-' instead of below, since not many double matches surely? Then can filter out all the duplicate row numbers at end, use sorting?
-' Have array alpha sort function already, can adjust for integer sort, then iterate if next integer same then delete
-' Or Could use collection and add row number as the key each time, incrementing Item as integer number by 1
-' since Collection.contains method works on the key, or use Dictionary
-
-' O is definitive list to filter, final array comes from O
-
-' **** Outer loop on Compare List C then Inner Loop on Original list O
-' MISS NOW: Check if current row number O(Y) already in Resray, if yes skip below
-' CHECK MATCH: if C(X) matches O(Y), append O(Y) row number to Resray, just append Y in fact
-' MISS NOW: ** OR remove O(Y) from O array instead of checking inclusion, since it only needs to be once in Resray.
-' Keep in inner O loop, just for edge cases, checking other names for match
-
-' to iterate each resray row, check trimmed cell to right blank, exit if blank, or add to 2ndary array if not
 
 Dim resArray() As Integer
 ReDim Preserve resArray(0 To 0)
