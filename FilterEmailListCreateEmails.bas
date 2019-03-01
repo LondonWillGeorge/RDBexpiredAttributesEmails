@@ -403,3 +403,17 @@ Public Function wordLetter(templateFile As String, bodyText As String, endtext A
 
 End Function
 
+
+Private Function emailMainText1(ByVal firstName As String, ByRef paragArray() As String) As String
+
+    ' Do formatting inside here first, should be fairly simple for body of email
+    emailMainText1 = "Dear " + firstName + "," ' + vbCrLf + vbCrLf
+    
+    ' Build main text from all the initial text paragraphs in file
+    For ct = 2 To 10 Step 2
+        emailMainText1 = emailMainText1 + vbCrLf + vbCrLf + paragArray(ct)
+    Next ct
+    
+    ' Debug.Print (emailMainText1) ' OK main para fine here
+
+End Function
