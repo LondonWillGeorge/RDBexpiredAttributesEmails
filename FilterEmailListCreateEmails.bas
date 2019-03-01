@@ -138,6 +138,7 @@ Sub CreateEmails_Click()
 
     If Cells(2, 3) <> "" Then
     
+    Dim messagePath As String: messagePath = ThisWorkbook.path & "\MessageText.docx"
     
     
     
