@@ -140,6 +140,8 @@ Sub CreateEmails_Click()
     
     Dim messagePath As String: messagePath = ThisWorkbook.path & "\MessageText.docx"
     
+    Dim paragArray() As String
+    ReDim Preserve paragArray(0 To 0)
     
     
     
