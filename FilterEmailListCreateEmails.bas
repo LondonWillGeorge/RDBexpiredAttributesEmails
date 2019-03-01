@@ -138,13 +138,8 @@ Sub CreateEmails_Click()
 
     If Cells(2, 3) <> "" Then
     
-    ' Could build Dictionary on Column C names, with keys as the name, and values as the row number, might be more efficient.
-    ' but fuzzy match problem remains so dictionary may not be much easier?
     
-    ' Gives error: cell = ActiveSheet.Range("D67")
-    ' was: For Each cell In Worksheets("Emails").Columns("G").Cells.SpecialCells(xlCellTypeConstants)
     
-    'TODO: check if column C not blank and message an error stop the app if so?
     
     
     For Each cell In ActiveSheet.Columns("C").Cells.SpecialCells(xlCellTypeConstants)
@@ -157,7 +152,7 @@ Sub CreateEmails_Click()
         ' save the row number of the current candidate for use in this loop
         RowNum = cell.Row
         full_name = Cells(RowNum, 4)
-        'Get first name only from name string, so we can address them by first name.
+        ' Get first name only from name string, so we can address them by first name.
         firstName = Split(Cells(RowNum, 4), " ")(0)
     
         If cell.Value Like "?*@?*.?*" Then
