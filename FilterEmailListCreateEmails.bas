@@ -135,7 +135,7 @@ Sub CreateEmails_Click()
     
     On Error GoTo cleanup
 
-    errorList = ""
+    Dim errorList As String: errorList = ""
 
     If Cells(2, 3) <> "" Then
     
