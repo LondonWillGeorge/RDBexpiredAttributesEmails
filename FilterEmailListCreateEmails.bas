@@ -464,7 +464,7 @@ Public Function wordLetter(templateFile As String, bodyText As String, endtext A
 ' uncomment below if you want to debug file path later
 ' Debug.Print ("template file path coming in to wordletter function as: " + templateFile)
 
-   Dim objWord As Application
+   Dim objWord 'As Application declaring as application seems to generate obscure runtime errors?
 
    Dim objDoc
 
