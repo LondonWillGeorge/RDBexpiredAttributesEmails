@@ -123,6 +123,14 @@ End Sub
 
 'Email generation base code from: http://www.rondebruin.nl/win/winmail/Outlook/tips.htm
 'Working in Office 2000-2016
+
+' Formatting Word attachment with different formats in different parts of document
+' https://stackoverflow.com/questions/26264715/vba-writing-to-word-changing-font-formatting
+' Try convert HTML to plain text from here?
+' https://stackoverflow.com/questions/5327512/convert-html-to-plain-text-in-vba
+
+' https://stackoverflow.com/questions/27854534/how-do-i-insert-html-to-word-using-vba
+' try getelementbyid or similar on the .htmlbody string
 Sub CreateEmails_Click()
 
     Dim OutApp As Object
