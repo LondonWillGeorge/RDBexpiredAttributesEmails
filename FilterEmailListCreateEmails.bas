@@ -452,6 +452,7 @@ Public Function wordLetter(templateFile As String, bodyText As String) As Object
    Set objWord = GetObject(, "Word.Application")
    If Err.Number > 0 Then Set objWord = CreateObject("Word.Application")
    On Error GoTo 0
+   ' Where is 0 here? Don't want to repeat html object creation?
    
    objWord.Application.DisplayAlerts = False
    
