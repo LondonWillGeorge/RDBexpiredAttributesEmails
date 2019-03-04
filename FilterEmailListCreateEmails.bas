@@ -208,6 +208,11 @@ Sub CreateEmails_Click()
                 .Subject = paragArray(0)
                 .body = emailMainText1(firstName, paragArray()) ' returns string with main text before variable text
                 
+                With .body
+                    .Bold = True
+                End With
+                
+                
                 proofs = 0
                 refs = 0
                 dvla = False
