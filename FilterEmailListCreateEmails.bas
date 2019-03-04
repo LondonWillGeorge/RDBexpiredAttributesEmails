@@ -1,4 +1,5 @@
 Attribute VB_Name = "FilterEmailListCreateEmails"
+' Option Explicit
 ' May need to End 1st word task manually in Task Manager upon running the application
 
 Sub FilterEmailList_Click()
