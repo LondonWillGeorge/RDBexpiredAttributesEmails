@@ -232,7 +232,7 @@ Sub CreateEmails_Click()
                 ' somewhat nastily it will not throw error with single " just runs by ignoring it
                 
                 ' was 14px, is it picking up font size? it does pick up color attribute
-                .htmlbody = "<HTML><body style=""font-family: Calibri; font-size: 16px; color: #000; line-height: 1;"">" + "Dear " + firstName + ",<br>"
+                .htmlbody = "<HTML><body style=""font-family: Calibri; font-size: 16px; color: #000; line-height: 1;"">" + "<p>Dear " + firstName + ",</p>"
  
                 .htmlbody = .htmlbody + introHTML
                 
