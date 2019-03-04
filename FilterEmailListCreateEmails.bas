@@ -242,12 +242,12 @@ Sub CreateEmails_Click()
                 dvla = False
 
                 For colNum = 5 To 21
-                ' iterate to right until empty, add the text to .Body
-                    If Trim(Cells(RowNum, colNum)) = "" Then
-                        Exit For
-                    ElseIf colNum = 5 Then
-                        .Subject = .Subject + "s"
-                    End If
+                ' iterate to right until empty, add the text to .htmlbody
+'                    If Trim(Cells(RowNum, colNum)) = "" Then
+'                        Exit For
+'                    ElseIf colNum = 5 Then
+'                        .Subject = .Subject + "s"
+'                    End If
 
                     ' add text
                     cellValue = Cells(RowNum, colNum)
