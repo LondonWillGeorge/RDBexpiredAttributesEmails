@@ -478,10 +478,10 @@ Public Function wordLetter(templateFile As String, bodyText As String) As Object
         ' ActiveDocument.Paragraphs.Add - This example adds a new paragraph mark at the end of the active document.
         ' tagps.get... should also work
         ' Paragraphs collection object starts at index 1 apparently? https://docs.microsoft.com/en-us/office/vba/api/word.paragraphs
-        ActiveDocument.Paragraphs.Add
-        pct = ActiveDocument.Paragraphs.Count
-        With ActiveDocument.Paragraphs(pct).Range
-            .typetext (tagp)
+        wordLetter.Paragraphs.Add ' ActiveDocument.Paragraphs.Add exits here because of error, perhaps there is no active document?
+        pct = wordLetter.Paragraphs.Count
+        With wordLetter.Paragraphs(pct).Range
+            .text = tagp.innerHTML ' error with .typetext doesn't accept, and .innerText returns "" for <p> tags with <h3> inside them it seems...
         End With
         
     Next tagp
