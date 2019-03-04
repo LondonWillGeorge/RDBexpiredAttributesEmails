@@ -185,6 +185,8 @@ Sub CreateEmails_Click()
     
     introDoc.Close
     
+    Set introDoc = Nothing
+    
     ' The .Quit line closes the Word process in Windows Task Manager - crucial!
     ' Setting object to Nothing without this will still NOT end the Word Task
     objWordMessage.Quit
@@ -518,6 +520,8 @@ Public Function wordLetter(templateFile As String, bodyText As String) As Object
    End With
    
    Set html = Nothing
+   
+   Set wordLetter = Nothing
    ' brings up locked for editing message unless you close it each time,
    ' because it's still open of course
    wordLetter.Close
