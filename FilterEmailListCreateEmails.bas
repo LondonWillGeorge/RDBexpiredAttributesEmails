@@ -158,24 +158,24 @@ Sub CreateEmails_Click()
     objWordMessage.Application.DisplayAlerts = False
     objWordMessage.Application.ScreenUpdating = False
     
-    Dim msgDoc As Object: Set msgDoc = objWordMessage.Documents.Open(messagePath, Visible = False, ReadOnlyRecommended = False)
-    ' check path and show mgbox if path has no file
-
-    Set colParagraphs = msgDoc.Paragraphs
-    paraCount = 0
-    For Each objParagraph In colParagraphs
-    
-        ' Debug.Print ("parag text is: " + objParagraph.Range.text)
-        lineText = Trim(objParagraph.Range.text)
-        If Trim(lineText) <> "" Then ' Trimming again here still gives blank items between!
-           ' add to the text string array here
-           paragArray(paraCount) = lineText
-           paraCount = paraCount + 1
-           ReDim Preserve paragArray(0 To paraCount)
-        End If
-    Next
-    
-    msgDoc.Close
+'    Dim msgDoc As Object: Set msgDoc = objWordMessage.Documents.Open(messagePath, Visible = False, ReadOnlyRecommended = False)
+'    ' check path and show mgbox if path has no file
+'
+'    Set colParagraphs = msgDoc.Paragraphs
+'    paraCount = 0
+'    For Each objParagraph In colParagraphs
+'
+'        ' Debug.Print ("parag text is: " + objParagraph.Range.text)
+'        lineText = Trim(objParagraph.Range.text)
+'        If Trim(lineText) <> "" Then ' Trimming again here still gives blank items between!
+'           ' add to the text string array here
+'           paragArray(paraCount) = lineText
+'           paraCount = paraCount + 1
+'           ReDim Preserve paragArray(0 To paraCount)
+'        End If
+'    Next
+'
+'    msgDoc.Close
     
     Dim introPath As String: introPath = ThisWorkbook.path & "\MessageIntroHMTL.docx"
     
