@@ -177,6 +177,14 @@ Sub CreateEmails_Click()
     
     msgDoc.Close
     
+    Dim introPath As String: introPath = ThisWorkbook.path & "\MessageIntroHMTL.docx"
+    
+    Dim introDoc As Object: Set introDoc = objWordMessage.Documents.Open(introPath, Visible = False, ReadOnlyRecommended = False)
+    
+    Dim introHTML As String: introHTML = introDoc.Range.text
+    
+    introDoc.Close
+    
     ' The .Quit line closes the Word process in Windows Task Manager - crucial!
     ' Setting object to Nothing without this will still NOT end the Word Task
     objWordMessage.Quit
