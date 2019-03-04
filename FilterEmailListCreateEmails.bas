@@ -219,14 +219,20 @@ Sub CreateEmails_Click()
             Set OutMail = OutApp.CreateItem(0)
             On Error Resume Next
             With OutMail
+                .Importance = 2
                 .To = cell.Value
                 .Subject = paragArray(0)
-                .body = emailMainText1(firstName, paragArray()) ' returns string with main text before variable text
+                ' .body = emailMainText1(firstName, paragArray()) ' returns string with main text before variable text
                 
-                With .body
-                    .Bold = True
-                End With
+                .BodyFormat = olFormatHTML
                 
+                ' Ron De Bruin's website again: remember need "" double quotes inside the HTML style tags for them to be read,
+                ' somewhat nastily it will not throw error with single " just runs by ignoring it
+                
+                ' was 14px, is it picking up font size? it does pick up color attribute
+                .htmlbody = "<HTML><body style=""font-family: Calibri; font-size: 16px; color: #000; line-height: 1;"">" + "Dear " + firstName + ",<br>"
+ 
+                .htmlbody = .htmlbody + introHTML
                 
                 proofs = 0
                 refs = 0
