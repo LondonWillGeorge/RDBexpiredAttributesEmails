@@ -1,4 +1,4 @@
-Attribute VB_Name = "FilterEmailListCreateEmails"
+﻿Attribute VB_Name = "FilterEmailListCreateEmails"
 ' Option Explicit
 ' May need to End 1st word task manually in Task Manager upon running the application
 
@@ -223,7 +223,7 @@ Sub CreateEmails_Click()
             With OutMail
                 .Importance = 2
                 .To = cell.Value
-                .Subject = paragArray(0)
+                .Subject = "Urgent: Your xxxx Company Compliance Documents are Expiring!" ' paragArray(0)
                 ' .body = emailMainText1(firstName, paragArray()) ' returns string with main text before variable text
                 
                 .BodyFormat = olFormatHTML
