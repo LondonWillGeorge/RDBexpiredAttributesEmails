@@ -121,7 +121,6 @@ Next ind2
 
 End Sub
 
-
 'Email generation base code from: http://www.rondebruin.nl/win/winmail/Outlook/tips.htm
 'Working in Office 2000-2016
 Sub CreateEmails_Click()
@@ -375,6 +374,8 @@ Public Function wordLetter(templateFile As String, bodyText As String, endtext A
    ' wordLetter returns as string type (8) here..
    
    ' TODO: Try setting objFont = objWord.Font as Selection may be not most stable according SO poster
+   
+   '
 
    Set objSelection = objWord.Selection
    
