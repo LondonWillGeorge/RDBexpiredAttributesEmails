@@ -517,6 +517,7 @@ Public Function wordLetter(templateFile As String, bodyText As String) As Object
        ' doesn't work: .SaveAs2 Filename:="C:\Users\PATH\TestLetterSaving.docx"
    End With
    
+   Set html = Nothing
    ' brings up locked for editing message unless you close it each time,
    ' because it's still open of course
    wordLetter.Close
