@@ -346,13 +346,17 @@ Public Function wordLetter(templateFile As String, bodyText As String, endtext A
 ' uncomment below if you want to debug file path later
 ' Debug.Print ("template file path coming in to wordletter function as: " + templateFile)
 
-   Dim objWord
+   Dim objWord As Application
 
    Dim objDoc
 
    Dim objSelection
-
-   Set objWord = CreateObject("Word.Application") ' NB this is NOT yet set to Nothing at the end, but still works...
+   
+   ' Set objWord = CreateObject("Word.Application") ' NB this is NOT yet set to Nothing at the end, but still works...
+   On Error Resume Next
+   Set objWord = GetObject(, "Word.Application")
+   If Err.Number > 0 Then Set objWord = CreateObject("Word.Application")
+   On Error GoTo 0
    
    objWord.Application.DisplayAlerts = False
    
