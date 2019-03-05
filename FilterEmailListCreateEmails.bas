@@ -136,6 +136,16 @@ Sub CreateEmails_Click()
     Dim OutApp As Object
     Dim OutMail As Object
     Dim cell As Range
+    
+    'As Application declaring as application seems to generate obscure runtime errors?
+    Dim objWord As Object ' passed to attachment create function, declaring as object now
+    
+    ' Set objWord = CreateObject("Word.Application") ' NB this is NOT yet set to Nothing at the end, but still works...
+    On Error Resume Next
+    Set objWord = GetObject(, "Word.Application")
+    If Err.Number > 0 Then Set objWord = CreateObject("Word.Application")
+    On Error GoTo 0
+   ' Where is 0 here? Don't want to repeat html object creation?
 
     Application.ScreenUpdating = False
     Set OutApp = CreateObject("Outlook.Application")
@@ -443,18 +453,16 @@ Public Function wordLetter(templateFile As String, bodyText As String) As Object
 '                    Debug.Print ("A tag is: " + y.innerText + y.href)
 '                Next y
 
-   Dim objWord 'As Application declaring as application seems to generate obscure runtime errors?
-
    Dim objDoc
 
    Dim objSelection
    
-   ' Set objWord = CreateObject("Word.Application") ' NB this is NOT yet set to Nothing at the end, but still works...
-   On Error Resume Next
-   Set objWord = GetObject(, "Word.Application")
-   If Err.Number > 0 Then Set objWord = CreateObject("Word.Application")
-   On Error GoTo 0
-   ' Where is 0 here? Don't want to repeat html object creation?
+'   ' Set objWord = CreateObject("Word.Application") ' NB this is NOT yet set to Nothing at the end, but still works...
+'   On Error Resume Next
+'   Set objWord = GetObject(, "Word.Application")
+'   If Err.Number > 0 Then Set objWord = CreateObject("Word.Application")
+'   On Error GoTo 0
+'   ' Where is 0 here? Don't want to repeat html object creation?
    
    objWord.Application.DisplayAlerts = False
    
