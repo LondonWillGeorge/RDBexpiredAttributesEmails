@@ -403,18 +403,24 @@ Sub CreateEmails_Click()
                 Dim btext As String: btext = .htmlbody ' .body
                 ' Dim endtext As String: endtext = "Eg can insert a message here for everybody in different formatting, like Happy Easter from xxxx! etc"
                                 
-                Dim attached As Object: attached = wordLetter(ThisWorkbook.path & "\Template.docx", btext)
-                .Attachments.Add (ThisWorkbook.path & "\FinishedLetter.docx") '  (attached) doesnt work
-
-                ' We can add files also like this
-                '.Attachments.Add ("C:\DBS\JoeBloggs.doc") but will need to be sure files in right path before you do!
+                ' Try returning the file name and
+                Dim attached As Object: attached = wordLetter(ThisWorkbook.path & "\Template.docx", btext, objWord)
+                
+                ' Print doesn't work because attached is Nothing at this point Locals window shows, I don't know why yet trying to return it as the wordLetter Word object
+                ' Debug.Print ("attached doc path is: " + attached.document.path)
+                
+                .Attachments.Add (ThisWorkbook.path & "\FinishedLetter.docx")  '  (attached) doesnt work because it's Nothing
+                ' & "\Attachments\" & full_name & "-NextStepExpiringComplianceDocs.docx"
+                
+                ' Trying to get rid of Locked for Editing message on Word file
+                Set attached = Nothing
+                attached.Close
+                
                 ' Would want error handling anyway on the file path, with message added to error list
                 .Display 'change to .Send will send the emails
             End With
             On Error GoTo 0
             Set OutMail = Nothing
-            ' Trying to get rid of Locked for Editing message on Word file
-            Set attached = Nothing
 
         Else
            ' MsgBox (cell.Value + " at cell " + CStr(cell.Address) + " is not a proper email address. Check it please!")
