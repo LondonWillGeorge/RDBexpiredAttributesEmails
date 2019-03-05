@@ -442,7 +442,7 @@ End Sub
 
 ' https://docs.microsoft.com/en-us/office/vba/api/word.document
 
-Public Function wordLetter(templateFile As String, bodyText As String) As Object
+Public Function wordLetter(templateFile As String, bodyText As String, objWord As Object) As Object
 
     ' For the attachment, try to parse the whole htmlbody string as HTML..
     Dim html As HTMLDocument ' as new maybe not the best as late binding better?
