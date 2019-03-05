@@ -504,6 +504,13 @@ Public Function wordLetter(templateFile As String, bodyText As String, objWord A
         End With
         
     Next tagp
+    
+    ' test print the whole HTML string in the Attachment to plan parsing route
+    wordLetter.Paragraphs.Add
+    last = wordLetter.Paragraphs.Count
+    With wordLetter.Paragraphs(last).Range
+        .text = vbCrLf + vbCrLf + html.body.innerHTML ' error with .typetext doesn't accept, and .innerText returns "" for <p> tags with <h3> inside them it seems...
+    End With
 
 '   Set objSelection = objWord.Selection
 '
