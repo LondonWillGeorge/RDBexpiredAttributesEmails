@@ -268,10 +268,13 @@ Sub CreateEmails_Click()
 
                     ' Being naughty for now, and adding strings as hard code here, TODO: save in JSON file or Word file, fix space processing problem with Word
                     ' changing <br> tags to <p> now as got single line spacing working in body tag
+                    
+                    ' 5/3/19 NB The variable paragraphs are not picked up by HTML parser with <P><h3>...</h3>...</P> format despite Outlook not having problems with this format
+                    ' So change to <h3>..</h3><p>...</p> seems to be picked up properly then
                     Select Case cellValue
                         Case "DBS"
                             .htmlbody = .htmlbody + _
-                            "<p><h3><u>DBS</u></h3>Your DBS needs updating. If you have moved address within the last 12 months, please may you " + _
+                            "<h3><u>DBS</u></h3><p>Your DBS needs updating. If you have moved address within the last 12 months, please may you " + _
                             "provide us with your new full address and the date you moved into this address. If you registered with " + _
                             "the DBS Update Service, please may you provide us with the hard copy of your DBS and the 16 digit disclosure " + _
                             "number, so we can make relevant checks on-line. Please may you email this to xxxx" + "</p>"
@@ -312,7 +315,7 @@ Sub CreateEmails_Click()
                             
                         Case "EU Passport"
                             .htmlbody = .htmlbody + _
-                            "<p><h3><u>EU Passport & Right To Work in the UK (Brexit)</u></h3>Your Passport is about to expire. It is a " + _
+                            "<h3><u>EU Passport & Right To Work in the UK (Brexit)</u></h3><p>Your Passport is about to expire. It is a " + _
                             "legal requirement that you update this and send us a clear copy of your renewed Passport. Please may you send " + _
                             "this to xxxx. If you're from the EU, from the 30th March 2019, we require a copy " + _
                             "of your Pre-Settled or Settled status; without this, you will not be able to work in the UK. For more information " + _
@@ -328,7 +331,7 @@ Sub CreateEmails_Click()
                             .htmlbody = .htmlbody + _
                             "<p><h3><u>UK Passport</u></h3>Your Passport is about to expire. It is a legal requirement that you update this and " + _
                             "send us a clear copy of your renewed Passport. Please may you send this to xxx" + "</p>"
-                        
+                       
                         Case "DVLA"
                             dvla = True
                             .htmlbody = .htmlbody + _
@@ -342,7 +345,7 @@ Sub CreateEmails_Click()
 
                         Case "ID Badge"
                             .htmlbody = .htmlbody + _
-                            "<p><h3><u>ID Badge</u></h3>Your ID badge is only valid for one year and your current one is expiring. " + _
+                            "<h3><u>ID Badge</u></h3><p>Your ID badge is only valid for one year and your current one is expiring. " + _
                             "You will shortly receive a new valid ID badge in the post (if your address has changed within the " + _
                             "last 12 months, please inform the compliant team asap on <span  style=""color: #800080;"">0800 1234 5678</span> or email them at " + _
                             "xxxx)." + "</p>"
@@ -368,7 +371,7 @@ Sub CreateEmails_Click()
                 
                 If training > 0 Then
                     .htmlbody = .htmlbody + _
-                    "<p><h3><u>Mandatory Training</u></h3>Your mandatory training is about to expire. If you have completed your " + _
+                    "<h3><u>Mandatory Training</u></h3><p>Your mandatory training is about to expire. If you have completed your " + _
                     "training for Moving & Handling, Basic Life Support or any other training elsewhere, please may you " + _
                     "forward these to us at xxxx. Alternatively we will pay and book you into " + _
                     "various on-line courses or practical training courses close to your house, so please get in contact with us " + _
@@ -378,7 +381,7 @@ Sub CreateEmails_Click()
 
                 If proofs > 0 Then
                     .htmlbody = .htmlbody + _
-                    "<p><h3><u>Proof of Address</u></h3>We require two proofs of your address, this can be Utility Bills, Bank Statements, Council Tax " + _
+                    "<h3><u>Proof of Address</u></h3><p>We require two proofs of your address, this can be Utility Bills, Bank Statements, Council Tax " + _
                     "Bill, Letter from HMRC / Job Centre or your Driving Licence. Please may you email us a clear copy of two Proofs of Addresses to " + _
                     "xxxx." + "</p>"
 
@@ -386,7 +389,7 @@ Sub CreateEmails_Click()
 
                 If refs > 0 Then
                     .htmlbody = .htmlbody + _
-                    "<p><h3><u>Professional References</u></h3>Annually we have to renew your references, therefore we require two professional references " + _
+                    "<h3><u>Professional References</u></h3><p>Annually we have to renew your references, therefore we require two professional references " + _
                     "for you. Please may you provide us with the full name of the referee, their position, their place of work, their email " + _
                     "address and their contact telephone number. Please may you email this information to xxxx" + "</p>"
 
