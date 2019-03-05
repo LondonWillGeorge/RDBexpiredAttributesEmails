@@ -191,7 +191,9 @@ Sub CreateEmails_Click()
 '
 '    msgDoc.Close
     
-    Dim introPath As String: introPath = ThisWorkbook.path & "\MessageIntroHMTL.docx"
+    ' TODO: Find way to put ALL of text in Word files and load in without mangling the HTML, or even load directly from Word and convert into HTML
+    ' maybe someone wrote VBA module to do this already?
+    Dim introPath As String: introPath = ThisWorkbook.path & "\MessageIntroHTML.docx"
     
     Dim introDoc As Object: Set introDoc = objWordMessage.Documents.Open(introPath, Visible = False, ReadOnlyRecommended = False)
     
@@ -200,6 +202,18 @@ Sub CreateEmails_Click()
     introDoc.Close
     
     Set introDoc = Nothing
+    
+'  Footer is so short, leaving it in hard code for now
+'    ' Same for the footer for now, TODO: shorten to one set commands, and ideally one document
+'    Dim footerPath As String: footerPath = ThisWorkbook.path & "\MessageFooterHTML.docx"
+'
+'    Dim footerDoc As Object: Set footerDoc = objWordMessage.Documents.Open(footerPath, Visible = False, ReadOnlyRecommended = False)
+'
+'    Dim footerHTML As String: footerHTML = footerDoc.Range.text
+'
+'    footerDoc.Close
+'
+'    Set footerDoc = Nothing
     
     ' The .Quit line closes the Word process in Windows Task Manager - crucial!
     ' Setting object to Nothing without this will still NOT end the Word Task
@@ -278,17 +292,17 @@ Sub CreateEmails_Click()
                     Select Case cellValue
                         Case "DBS"
                             .htmlbody = .htmlbody + _
-                            "<h3><u>DBS</u></h3><p>Your DBS needs updating. If you have moved address within the last 12 months, please may you " + _
+                            "<div><h3><u>DBS</u></h3><p>Your DBS needs updating. If you have moved address within the last 12 months, please may you " + _
                             "provide us with your new full address and the date you moved into this address. If you registered with " + _
                             "the DBS Update Service, please may you provide us with the hard copy of your DBS and the 16 digit disclosure " + _
-                            "number, so we can make relevant checks on-line. Please may you email this to xxxx" + "</p>"
+                            "number, so we can make relevant checks on-line. Please may you email this to xxxx" + "</p></div>"
                             
                         Case "FTW"
                             .htmlbody = .htmlbody + _
-                            "<p><h3><u>(FTW) - Fitness to Work Certificate</u></h3>Every year we need to obtain a new FTW certificate for you. If your " + _
+                            "<h3><u>(FTW) - Fitness to Work Certificate</u></h3><p>Every year we need to obtain a new FTW certificate for you. If your " + _
                             "health has changed, please may you inform us at xxxx. If your circumstances haven't changed " + _
-                            "in the last 12 months, please do inform us, then we can apply for a new FTW certificate for you. If you work in an xxx area, " + _
-                            "do inform us (xxxx)." + "</p>"
+                            "in the last 12 months, please do inform us, then we can apply for a new FTW certificate for you. If you work in an xxxx area, " + _
+                            "do inform us (yyyy)." + "</p>"
 
                         Case "Appraisal"
                             .htmlbody = .htmlbody + _
@@ -328,23 +342,23 @@ Sub CreateEmails_Click()
                         
                         Case "ROW Passport"
                             .htmlbody = .htmlbody + _
-                            "<p><h3><u>Non-EU Passport</u></h3>Your Passport is about to expire. It is a legal requirement that you update this and " + _
+                            "<h3><u>Non-EU Passport</u></h3><p>Your Passport is about to expire. It is a legal requirement that you update this and " + _
                             "send us a clear copy of your renewed Passport. Please may you send this to xxxx" + "</p>"
                         
                         Case "UK Passport"
                             .htmlbody = .htmlbody + _
-                            "<p><h3><u>UK Passport</u></h3>Your Passport is about to expire. It is a legal requirement that you update this and " + _
-                            "send us a clear copy of your renewed Passport. Please may you send this to xxx" + "</p>"
-                       
+                            "<h3><u>UK Passport</u></h3><p>Your Passport is about to expire. It is a legal requirement that you update this and " + _
+                            "send us a clear copy of your renewed Passport. Please may you send this to xxxx" + "</p>"
+                        
                         Case "DVLA"
                             dvla = True
                             .htmlbody = .htmlbody + _
-                            "<p><h3><u>DVLA</u></h3>We require a copy of your driving licence, please may you email this to us - " + _
+                            "<h3><u>DVLA</u></h3><p>We require a copy of your driving licence, please may you email this to us - " + _
                             "xxxx." + "</p>"
                         
                         Case "Visa"
                             .htmlbody = .htmlbody + _
-                            "<p><h3><u>Visa</u></h3>Your Visa is about to expire. It is a legal requirement that you update this " + _
+                            "<h3><u>Visa</u></h3><p>Your Visa is about to expire. It is a legal requirement that you update this " + _
                             "and send us a clear copy of your renewed Visa. Please may you send this to xxxx." + "</p>"
 
                         Case "ID Badge"
@@ -358,7 +372,7 @@ Sub CreateEmails_Click()
                             
                         Case "YMCA"
                             .htmlbody = .htmlbody + _
-                            "<p><h3><u>YMCA - Prevention & Management of Bad Dancing Certificate</u></h3>We " + _
+                            "<h3><u>YMCA - Prevention & Management of Bad Dancing Certificate</u></h3><p>We " + _
                             "require an up to date YMCA training certificate from you. If you have completed a course elsewhere, " + _
                             "may you email this to xxxx. " + _
                             "If you haven't completed this course within the last year, we will happily book you into a course. Please " + _
@@ -399,15 +413,20 @@ Sub CreateEmails_Click()
 
                 End If
                 
-                ' ************************* Put Footer message here!
-                
+                ' Add footer signiature to the message
+                .htmlbody = .htmlbody + "<p>Kind regards,<br><br><br>" + _
+                "<b><span  style=""color: #672983;"">The Compliance Team</span><br><span  style=""color: #0399A3;"">xxxx Company</span><br><br>Tel <span  style=""color: #672983;"">0800 1234 5678</span><br>Email compliance@xxxxcompany.co.uk<br>Web <span  style=""color: #672983;"">www.xxxxcompany.co.uk</span></b><br><br></p>"
                 
                 .htmlbody = .htmlbody + "</HTML></BODY>"
                 
-                Dim btext As String: btext = .htmlbody ' .body
-                ' Dim endtext As String: endtext = "Eg can insert a message here for everybody in different formatting, like Happy Easter from xxxx! etc"
-                                
-                ' Try returning the file name and
+                Dim btext As String: btext = .htmlbody
+                
+                ' make email address xxxx brand green #0399A3 in htmlbody string everywhere here, NB in Intro string from Word file, Excel/Word mangles colour tags and therefore disables them somehow
+                ' Doing it here avoids btext passing them into the attachment function, also it's neater code
+                .htmlbody = Replace(.htmlbody, "compliance@xxxxcompany.co.uk", "<span  style=""color: #0399A3;"">compliance@xxxxcompany.co.uk</span>")
+
+                ' "Template.docx" keep Excel file and template same folder, same level
+
                 Dim attached As Object: attached = wordLetter(ThisWorkbook.path & "\Template.docx", btext, objWord)
                 
                 ' Print doesn't work because attached is Nothing at this point Locals window shows, I don't know why yet trying to return it as the wordLetter Word object
@@ -495,6 +514,21 @@ Public Function wordLetter(templateFile As String, bodyText As String, objWord A
     ' Need put divs around each paragraph?
     ' Dim tagas As Object: Set tagas = html.getElementsByTagName("a")
     Dim tagps As Object: Set tagps = html.getElementsByTagName("p")
+    
+    Dim tagdivs As Object: Set tagdivs = html.getElementsByTagName("div")
+    
+    Dim tagH3s As Object
+    
+    For Each div In tagdivs
+        ' check if h3 is in div or just p, if just p it is in first main paragraph section.
+        Set tagH3s = div.getElementsByTagName("h3")
+        If tagH3s.Length > 0 Then
+            For Each h3 In tagH3s
+                Debug.Print ("got at least one h3 tag which is: " + h3.innerHTML)
+            Next h3
+        End If
+        Debug.Print ("div content is: " + div.innerHTML)
+    Next div
     
     For Each tagp In tagps
         ' Will be para on own, or have h3 heading tag inside at top
