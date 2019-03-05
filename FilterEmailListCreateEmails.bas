@@ -538,6 +538,7 @@ Public Function wordLetter(templateFile As String, bodyText As String, objWord A
    
    ' DELETE the old file before resaving with SAME NAME
    ' But this still doesn't work it seems remembering and numbering consecutive file names
+   ' Error if try save same name 2nd time around, cant find how to overwrite yet
    
    
 '   If Dir(savePath) <> "" Then
