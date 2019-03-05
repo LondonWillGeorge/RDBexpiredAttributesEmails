@@ -431,7 +431,7 @@ Sub CreateEmails_Click()
     
     End If
     
-Debug.Print (errorList)
+' Debug.Print (errorList)
 
 cleanup:
     Set OutApp = Nothing
