@@ -536,6 +536,17 @@ Public Function wordLetter(templateFile As String, bodyText As String, objWord A
    ' Without it, file will be blank!
    objWord.Application.ScreenUpdating = True
    
+   ' DELETE the old file before resaving with SAME NAME
+   ' But this still doesn't work it seems remembering and numbering consecutive file names
+   
+   
+'   If Dir(savePath) <> "" Then
+'      ' First remove readonly attribute, if set
+'      SetAttr savePath, vbNormal
+'      ' Then delete the file
+'      Kill savePath ' this throws error on 2nd time this function called
+'   End If
+   
    ' SaveAs2 needs the FileFormat specified here as well as filepath to save. MS Docs refer FileFormat as optional
    ' but I'm guessing may be because wordLetter is string type object here? Something I don't understand about this fully..
    With wordLetter
