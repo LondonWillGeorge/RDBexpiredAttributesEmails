@@ -1,6 +1,7 @@
 ﻿Attribute VB_Name = "FilterEmailListCreateEmails"
 ' Option Explicit
 ' May need to End 1st word task manually in Task Manager upon running the application
+Dim AttachCount As Integer
 
 Sub FilterEmailList_Click()
 
@@ -24,6 +25,9 @@ Dim mailDict As Scripting.Dictionary
 Set mailDict = New Scripting.Dictionary
 
 emailsLen = ActiveSheet.Range("a10000").End(xlUp).Row
+
+' Set attachment count, used to name attachment files differently
+AttachCount = 0
 
 ' populate dictionary type with all the names in this column
 For ind = 2 To emailsLen
@@ -409,7 +413,9 @@ Sub CreateEmails_Click()
                 ' Print doesn't work because attached is Nothing at this point Locals window shows, I don't know why yet trying to return it as the wordLetter Word object
                 ' Debug.Print ("attached doc path is: " + attached.document.path)
                 
-                .Attachments.Add (ThisWorkbook.path & "\FinishedLetter.docx")  '  (attached) doesnt work because it's Nothing
+                savePath2 = ThisWorkbook.path & "\Attachments\FinishedLetter" & Str(AttachCount) & ".docx"
+                
+                .Attachments.Add (savePath2)  '  (attached) doesnt work because it's Nothing
                 ' & "\Attachments\" & full_name & "-NextStepExpiringComplianceDocs.docx"
                 
                 ' Trying to get rid of Locked for Editing message on Word file
@@ -540,6 +546,8 @@ Public Function wordLetter(templateFile As String, bodyText As String, objWord A
    ' But this still doesn't work it seems remembering and numbering consecutive file names
    ' Error if try save same name 2nd time around, cant find how to overwrite yet
    
+   AttachCount = AttachCount + 1
+   savePath = ThisWorkbook.path & "\Attachments\Letter" & Str(AttachCount) & ".docx"
    
 '   If Dir(savePath) <> "" Then
 '      ' First remove readonly attribute, if set
@@ -552,9 +560,11 @@ Public Function wordLetter(templateFile As String, bodyText As String, objWord A
    ' but I'm guessing may be because wordLetter is string type object here? Something I don't understand about this fully..
    With wordLetter
        ' .SaveAs2 Filename:=ThisWorkbook.path & "\Attachments\" & full_name & "-FinishedLetter.docx", FileFormat:=wdFormatDocumentDefault
-       .SaveAs2 Filename:=ThisWorkbook.path & "\FinishedLetter.docx", FileFormat:=wdFormatDocumentDefault  ' this is docx format
+       .SaveAs2 Filename:=savePath, FileFormat:=wdFormatDocumentDefault    ' this is docx format
        ' doesn't work: .SaveAs2 Filename:="C:\Users\PATH\TestLetterSaving.docx"
    End With
+   
+   Debug.Print ("wordLetter just saved to: " + wordLetter.path + "\" + wordLetter.Name)
    
    Set html = Nothing
    
