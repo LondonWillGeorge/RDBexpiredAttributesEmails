@@ -532,10 +532,11 @@ Public Function wordLetter(templateFile As String, bodyText As String) As Object
    
    Set html = Nothing
    
-   Set wordLetter = Nothing
+   ' Set nothing in calling function..
+   ' Set wordLetter = Nothing
    ' brings up locked for editing message unless you close it each time,
    ' because it's still open of course
-   wordLetter.Close
+   ' wordLetter.Close
    
    Application.DisplayAlerts = True
 
