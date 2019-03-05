@@ -532,6 +532,7 @@ Public Function wordLetter(templateFile As String, bodyText As String, objWord A
    ' SaveAs2 needs the FileFormat specified here as well as filepath to save. MS Docs refer FileFormat as optional
    ' but I'm guessing may be because wordLetter is string type object here? Something I don't understand about this fully..
    With wordLetter
+       ' .SaveAs2 Filename:=ThisWorkbook.path & "\Attachments\" & full_name & "-FinishedLetter.docx", FileFormat:=wdFormatDocumentDefault
        .SaveAs2 Filename:=ThisWorkbook.path & "\FinishedLetter.docx", FileFormat:=wdFormatDocumentDefault  ' this is docx format
        ' doesn't work: .SaveAs2 Filename:="C:\Users\PATH\TestLetterSaving.docx"
    End With
