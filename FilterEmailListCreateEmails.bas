@@ -567,23 +567,3 @@ Public Function wordLetter(templateFile As String, bodyText As String, objWord A
    Application.DisplayAlerts = True
 
 End Function
-
-
-Private Function emailMainText1(ByVal firstName As String, ByRef paragArray() As String) As String
-
-    ' Do formatting inside here first, should be fairly simple for body of email
-    emailMainText1 = "Dear " + firstName + "," ' + vbCrLf + vbCrLf
-    
-    ' Build main text from all the initial text paragraphs in file
-    For ct1 = 2 To 4 Step 2
-        emailMainText1 = emailMainText1 + vbCrLf + vbCrLf + vbCrLf + paragArray(ct1)
-    Next ct1
-    'paragArray(8) needs bold and underlined
-    
-    For ct2 = 6 To 10 Step 2
-        emailMainText1 = emailMainText1 + vbCrLf + vbCrLf + paragArray(ct2)
-    Next ct2
-    
-    ' Debug.Print (emailMainText1) ' OK main para fine here
-
-End Function
