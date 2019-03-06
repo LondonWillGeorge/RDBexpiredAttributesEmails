@@ -260,7 +260,7 @@ Sub CreateEmails_Click()
                 ' somewhat nastily it will not throw error with single " just runs by ignoring it
                 
                 ' was 14px, is it picking up font size? it does pick up color attribute
-                .htmlbody = "<HTML><body style=""font-family: Calibri; font-size: 16px; color: #000; line-height: 1; font-weight: bold;"">" + "<p>Dear " + firstName + ",</p>"
+                .htmlbody = "<HTML><body style=""font-family: Calibri; font-size: 16px; color: #000; line-height: 1; font-weight: bold;"">" + "<div><p>Dear " + firstName + ",</p></div>"
  
                 .htmlbody = .htmlbody + introHTML
                 
@@ -414,7 +414,7 @@ Sub CreateEmails_Click()
                 End If
                 
                 ' Add footer signiature to the message
-                .htmlbody = .htmlbody + "<div><p><br>Kind regards,<br><br><br>" + _
+                .htmlbody = .htmlbody + "<div><p><br><br>Kind regards,<br><br><br>" + _
                 "<b><span  style=""color: #672983;"">The Compliance Team</span><br><span  style=""color: #0399A3;"">xxxx Company</span><br><br><br>Tel <span  style=""color: #672983;"">0800 1234 5678</span><br>Email compliance@xxxxcompany.co.uk<br>Web <span  style=""color: #672983;"">www.xxxxcompany.co.uk</span></b><br><br></p></div>"
                 
                 .htmlbody = .htmlbody + "</HTML></BODY>"
