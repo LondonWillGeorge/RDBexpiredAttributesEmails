@@ -541,7 +541,9 @@ Public Function wordLetter(templateFile As String, bodyText As String, objWord A
         wordLetter.Paragraphs.Add ' ActiveDocument.Paragraphs.Add exits here because of error, perhaps there is no active document?
         pct = wordLetter.Paragraphs.Count
         With wordLetter.Paragraphs(pct).Range
-            .text = tagp.innerHTML ' error with .typetext doesn't accept, and .innerText returns "" for <p> tags with <h3> inside them it seems...
+            .text = tagp.innerText ' .innerHTML error with .typetext doesn't accept, and .innerText returns "" for <p> tags with <h3> inside them it seems...
+            .Underline = True
+            .Bold = True
         End With
         
     Next tagp
