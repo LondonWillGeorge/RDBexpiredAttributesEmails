@@ -516,43 +516,86 @@ Public Function wordLetter(templateFile As String, bodyText As String, objWord A
     
     ' Need all paragraphs in Word loaded file and in hard code to have div tags enclosing, then they're picked up properly here
     For Each div In tagdivs
-        ' check if h3 is in div or just p, if just p it is in first main paragraph section.
-        Set tagH3s = div.getElementsByTagName("h3")
-        If tagH3s.Length > 0 Then
-            For Each h3 In tagH3s
-                wordLetter.Paragraphs.Add
-                pct = wordLetter.Paragraphs.Count
-                With wordLetter.Paragraphs(pct).Range
-                    .text = h3.innerText
-                    .Font.Underline = True
-                    .Font.Bold = True
-                End With
-                Debug.Print ("got at least one h3 tag which is: " + h3.innerHTML)
-            Next h3
+        'reject the footer text by checking if "kind regards" is in it! bit hacky!
+        If InStr(div.innerHTML, "Kind regards") = 0 Then
+            ' check if h3 is in div or just p, if just p it is in first main paragraph section.
+            Set tagH3s = div.getElementsByTagName("h3")
+            If tagH3s.Length > 0 Then
+                For Each h3 In tagH3s
+                    wordLetter.Paragraphs.Add
+                    pct = wordLetter.Paragraphs.Count
+                    With wordLetter.Paragraphs(pct).Range
+                        .text = h3.innerText
+                        '.Font.textColor.RGB = RGB(143, 8, 201) ' Purple
+                        'brighten text a bit too
+                        '.Font.textColor.Brightness = 0.4
+                        .Font.Underline = True
+                        .Font.Bold = True
+                    End With
+                    Debug.Print ("got at least one h3 tag which is: " + h3.innerHTML)
+                Next h3
+            End If
+            
+            Set tagps = div.getElementsByTagName("p")
+            If tagps.Length > 0 Then
+                For Each p In tagps
+                    wordLetter.Paragraphs.Add
+                    pct = wordLetter.Paragraphs.Count
+                    With wordLetter.Paragraphs(pct).Range
+                        ' check inner text for footer unique substring, if yes call footer process function
+                        Debug.Print ("tagp HTML: " + p.innerHTML)
+                        .text = p.innerText
+                        .Font.Underline = False
+                        .Font.Bold = False
+                    End With
+                    Debug.Print ("got p inner text is: " + p.innerText)
+                Next p
+            End If
+            
+            ' Keep so when testing, can see immediate window this is processing to here:
+            Debug.Print ("div content is: " + div.innerHTML + vbCrLf)
         End If
-        
-        Set tagps = div.getElementsByTagName("p")
-        If tagps.Length > 0 Then
-            For Each p In tagps
-                wordLetter.Paragraphs.Add
-                pct = wordLetter.Paragraphs.Count
-                With wordLetter.Paragraphs(pct).Range
-                    ' check inner text for footer unique substring, if yes call footer process function
-                    Debug.Print ("tagp HTML: " + p.innerHTML)
-                    .text = p.innerText
-                    .Font.Underline = False
-                    .Font.Bold = False
-                End With
-                Debug.Print ("got p inner text is: " + p.innerText)
-            Next p
-        End If
-        
-        ' Keep so when testing, can see immediate window this is processing to here:
-        Debug.Print ("div content is: " + div.innerHTML + vbCrLf)
     Next div
     
-    'print word footer
-    
+    ' print word footer here individually, otherwise too much of a brain fry with in-paragraph formatting
+    ' get the character number of a string with Instr(string, substring) returns 0 if not, but if there,
+    ' gives the character number first character is 1, then use this in Word range to format
+    ' ActiveDocument.Range(ActiveDocument.Paragraphs(1).Range.Characters(5).Start, _
+    ActiveDocument.Paragraphs(1).Range.Characters(10).End).Font.Bold = True
+    wordLetter.Paragraphs.Add
+    pct = wordLetter.Paragraphs.Count
+    With wordLetter.Paragraphs(pct).Range
+        .text = vbCrLf & "Kind regards," & vbCrLf & vbCrLf & vbCrLf & "The Compliance Team" & vbCrLf & _
+        "xxxx Company" & vbCrLf & "Tel 0800 1234 5678" & vbCrLf & "Email compliance@xxxxcompany.co.uk" _
+        & vbCrLf & "Web www.xxxxcompany.co.uk"
+        With .Font
+            .Bold = True
+            'testing
+            .textColor.RGB = RGB(143, 8, 201)
+        End With
+        
+        'NB Characters collection doesnt work this way: With .Characters(1, 14)
+        ' Apply non-bold and black colour to "Kind regards," only
+        For a = 1 To 14
+            With .Characters(a)
+                .Font.Bold = False
+                .Font.textColor.RGB = RGB(0, 0, 0)
+            End With
+        Next a
+        
+        Debug.Print ("instring comp team: " + Str(InStr(.text, "The Compliance Team"))) ' gives 18, so starts at 1, same as characters collection
+        
+'        For b = chStart To chEnd
+'            With .Characters(b)
+'                .Font.textColor.RGB = RGB(143, 8, 201) ' Purple
+'                'brighten text a bit too
+'                .Font.textColor.Brightness = 0.4
+'            End With
+'        Next b
+        
+
+
+    End With
     
     
 '    For Each tagp In tagps
