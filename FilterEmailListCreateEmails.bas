@@ -590,63 +590,9 @@ Public Function wordLetter(templateFile As String, bodyText As String, objWord A
         Next a
         
         Debug.Print ("instring comp team: " + Str(InStr(.text, "The Compliance Team"))) ' gives 18, so starts at 1, same as characters collection
-        
-'        For b = chStart To chEnd
-'            With .Characters(b)
-'                .Font.textColor.RGB = RGB(143, 8, 201) ' Purple
-'                'brighten text a bit too
-'                .Font.textColor.Brightness = 0.4
-'            End With
-'        Next b
-        
 
 
     End With
-    
-    
-'    For Each tagp In tagps
-'        ' Will be para on own, or have h3 heading tag inside at top
-'        ' some have <a> tags around the web address, remove tags and replace with hyperlink in Word doc
-'        ' With ActiveDocument.Paragraphs(1).Range end with
-'        ' ActiveDocument.Paragraphs.Add - This example adds a new paragraph mark at the end of the active document.
-'        ' tagps.get... should also work
-'        ' Paragraphs collection object starts at index 1 apparently? https://docs.microsoft.com/en-us/office/vba/api/word.paragraphs
-'        wordLetter.Paragraphs.Add ' ActiveDocument.Paragraphs.Add exits here because of error, perhaps there is no active document?
-'        pct = wordLetter.Paragraphs.Count
-'        With wordLetter.Paragraphs(pct).Range
-'            .text = tagp.innerText ' .innerHTML error with .typetext doesn't accept, and .innerText returns "" for <p> tags with <h3> inside them it seems...
-'            .Underline = True
-'            .Bold = True
-'        End With
-'
-'    Next tagp
-    
-    ' test print the whole HTML string in the Attachment to plan parsing route
-'    wordLetter.Paragraphs.Add
-'    last = wordLetter.Paragraphs.Count
-'    With wordLetter.Paragraphs(last).Range
-'        .text = vbCrLf + vbCrLf + html.body.innerHTML ' error with .typetext doesn't accept, and .innerText returns "" for <p> tags with <h3> inside them it seems...
-'    End With
-
-'   Set objSelection = objWord.Selection
-'
-'   With objSelection.Font
-'       .Bold = False
-'       .colorIndex = wdBlack
-'       .Name = "Verdana"
-'       .Size = "11"
-'
-'       objSelection.typetext (bodyText)
-'
-'       ' can change formatting for a uniform end text message
-'       .Bold = True
-'       .colorIndex = wdViolet ' not working apparently
-'       ' doesnt work; object / properties confused I think - .TextColor.ForeColor.RGB = RGB(0, 100, 100)
-'       .Size = "15"
-'
-'       objSelection.typetext (endtext)
-'
-'   End With
    
    ' this is necessary to update Word file before saving
    ' Without it, file will be blank!
