@@ -577,6 +577,7 @@ Public Function wordLetter(templateFile As String, bodyText As String, objWord A
             .Bold = True
             'testing
             .textColor.RGB = RGB(143, 8, 201)
+            '.textColor.Brightness = 0.4
         End With
         
         'NB Characters collection doesnt work this way: With .Characters(1, 14)
