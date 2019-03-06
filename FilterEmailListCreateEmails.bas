@@ -527,7 +527,7 @@ Public Function wordLetter(templateFile As String, bodyText As String, objWord A
                 Debug.Print ("got at least one h3 tag which is: " + h3.innerHTML)
             Next h3
         End If
-        Debug.Print ("div content is: " + div.innerHTML)
+        Debug.Print ("div content is: " + div.innerHTML + vbCrLf + "and div innertext is: " + div.innerText)
     Next div
     
     For Each tagp In tagps
