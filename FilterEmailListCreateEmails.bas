@@ -511,49 +511,75 @@ Public Function wordLetter(templateFile As String, bodyText As String, objWord A
    ' TODO: Try setting objFont = objWord.Font as Selection may be not most stable according SO poster
    
     ' Must SET an object, can't just use = !
-    ' Need put divs around each paragraph?
-    ' Dim tagas As Object: Set tagas = html.getElementsByTagName("a")
-    Dim tagps As Object: Set tagps = html.getElementsByTagName("p")
-    
+    ' Need put divs around each paragraph
     Dim tagdivs As Object: Set tagdivs = html.getElementsByTagName("div")
-    
     Dim tagH3s As Object
+    Dim tagps As Object
     
-    ' Want all paragraphs in Word loaded file and in hard code to have div tags enclosing, then they're picked up properly here
+    ' Need all paragraphs in Word loaded file and in hard code to have div tags enclosing, then they're picked up properly here
     For Each div In tagdivs
         ' check if h3 is in div or just p, if just p it is in first main paragraph section.
         Set tagH3s = div.getElementsByTagName("h3")
         If tagH3s.Length > 0 Then
             For Each h3 In tagH3s
+                wordLetter.Paragraphs.Add
+                pct = wordLetter.Paragraphs.Count
+                With wordLetter.Paragraphs(pct).Range
+                    .text = h3.innerText
+                    .Font.Underline = True
+                    .Font.Bold = True
+                End With
                 Debug.Print ("got at least one h3 tag which is: " + h3.innerHTML)
             Next h3
         End If
-        Debug.Print ("div content is: " + div.innerHTML + vbCrLf + "and div innertext is: " + div.innerText)
+        
+        Set tagps = div.getElementsByTagName("p")
+        If tagps.Length > 0 Then
+            For Each p In tagps
+                wordLetter.Paragraphs.Add
+                pct = wordLetter.Paragraphs.Count
+                With wordLetter.Paragraphs(pct).Range
+                    ' check inner text for footer unique substring, if yes call footer process function
+                    Debug.Print ("tagp HTML: " + p.innerHTML)
+                    .text = p.innerText
+                    .Font.Underline = False
+                    .Font.Bold = False
+                End With
+                Debug.Print ("got p inner text is: " + p.innerText)
+            Next p
+        End If
+        
+        ' Keep so when testing, can see immediate window this is processing to here:
+        Debug.Print ("div content is: " + div.innerHTML + vbCrLf)
     Next div
     
-    For Each tagp In tagps
-        ' Will be para on own, or have h3 heading tag inside at top
-        ' some have <a> tags around the web address, remove tags and replace with hyperlink in Word doc
-        ' With ActiveDocument.Paragraphs(1).Range end with
-        ' ActiveDocument.Paragraphs.Add - This example adds a new paragraph mark at the end of the active document.
-        ' tagps.get... should also work
-        ' Paragraphs collection object starts at index 1 apparently? https://docs.microsoft.com/en-us/office/vba/api/word.paragraphs
-        wordLetter.Paragraphs.Add ' ActiveDocument.Paragraphs.Add exits here because of error, perhaps there is no active document?
-        pct = wordLetter.Paragraphs.Count
-        With wordLetter.Paragraphs(pct).Range
-            .text = tagp.innerText ' .innerHTML error with .typetext doesn't accept, and .innerText returns "" for <p> tags with <h3> inside them it seems...
-            .Underline = True
-            .Bold = True
-        End With
-        
-    Next tagp
+    'print word footer
+    
+    
+    
+'    For Each tagp In tagps
+'        ' Will be para on own, or have h3 heading tag inside at top
+'        ' some have <a> tags around the web address, remove tags and replace with hyperlink in Word doc
+'        ' With ActiveDocument.Paragraphs(1).Range end with
+'        ' ActiveDocument.Paragraphs.Add - This example adds a new paragraph mark at the end of the active document.
+'        ' tagps.get... should also work
+'        ' Paragraphs collection object starts at index 1 apparently? https://docs.microsoft.com/en-us/office/vba/api/word.paragraphs
+'        wordLetter.Paragraphs.Add ' ActiveDocument.Paragraphs.Add exits here because of error, perhaps there is no active document?
+'        pct = wordLetter.Paragraphs.Count
+'        With wordLetter.Paragraphs(pct).Range
+'            .text = tagp.innerText ' .innerHTML error with .typetext doesn't accept, and .innerText returns "" for <p> tags with <h3> inside them it seems...
+'            .Underline = True
+'            .Bold = True
+'        End With
+'
+'    Next tagp
     
     ' test print the whole HTML string in the Attachment to plan parsing route
-    wordLetter.Paragraphs.Add
-    last = wordLetter.Paragraphs.Count
-    With wordLetter.Paragraphs(last).Range
-        .text = vbCrLf + vbCrLf + html.body.innerHTML ' error with .typetext doesn't accept, and .innerText returns "" for <p> tags with <h3> inside them it seems...
-    End With
+'    wordLetter.Paragraphs.Add
+'    last = wordLetter.Paragraphs.Count
+'    With wordLetter.Paragraphs(last).Range
+'        .text = vbCrLf + vbCrLf + html.body.innerHTML ' error with .typetext doesn't accept, and .innerText returns "" for <p> tags with <h3> inside them it seems...
+'    End With
 
 '   Set objSelection = objWord.Selection
 '
