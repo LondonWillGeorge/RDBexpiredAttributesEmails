@@ -260,7 +260,7 @@ Sub CreateEmails_Click()
                 ' somewhat nastily it will not throw error with single " just runs by ignoring it
                 
                 ' was 14px, is it picking up font size? it does pick up color attribute
-                .htmlbody = "<HTML><body style=""font-family: Calibri; font-size: 16px; color: #000; line-height: 1;"">" + "<p>Dear " + firstName + ",</p>"
+                .htmlbody = "<HTML><body style=""font-family: Calibri; font-size: 16px; color: #000; line-height: 1; font-weight: bold;"">" + "<p>Dear " + firstName + ",</p>"
  
                 .htmlbody = .htmlbody + introHTML
                 
@@ -299,16 +299,16 @@ Sub CreateEmails_Click()
                             
                         Case "FTW"
                             .htmlbody = .htmlbody + _
-                            "<h3><u>(FTW) - Fitness to Work Certificate</u></h3><p>Every year we need to obtain a new FTW certificate for you. If your " + _
+                            "<div><h3><u>(FTW) - Fitness to Work Certificate</u></h3><p>Every year we need to obtain a new FTW certificate for you. If your " + _
                             "health has changed, please may you inform us at xxxx. If your circumstances haven't changed " + _
                             "in the last 12 months, please do inform us, then we can apply for a new FTW certificate for you. If you work in an xxxx area, " + _
-                            "do inform us (yyyy)." + "</p>"
+                            "do inform us (yyyy)." + "</p></div>"
 
                         Case "Appraisal"
                             .htmlbody = .htmlbody + _
-                            "<p><h3><u>Appraisal</u></h3>When you join xxxx, you will be required to have an appraisal within the first six " + _
+                            "<div><h3><u>Appraisal</u></h3><p>When you join xxxx, you will be required to have an appraisal within the first six " + _
                             "months of joining us. Thereafter you will be required to have an appraisal annually. You are due an appraisal, so please may " + _
-                            "you call the Compliance Team on <span  style=""color: #800080;"">0800 1234 5678</span> and one of our xxxx will conduct an appraisal with you." + "</p>"
+                            "you call the Compliance Team on <span  style=""color: #800080;"">0800 1234 5678</span> and one of our xxxx will conduct an appraisal with you." + "</p></div>"
 
                         Case "BLS"
                             training = training + 1
@@ -333,50 +333,50 @@ Sub CreateEmails_Click()
                             
                         Case "EU Passport"
                             .htmlbody = .htmlbody + _
-                            "<h3><u>EU Passport & Right To Work in the UK (Brexit)</u></h3><p>Your Passport is about to expire. It is a " + _
+                            "<div><h3><u>EU Passport & Right To Work in the UK (Brexit)</u></h3><p>Your Passport is about to expire. It is a " + _
                             "legal requirement that you update this and send us a clear copy of your renewed Passport. Please may you send " + _
                             "this to xxxx. If you're from the EU, from the 30th March 2019, we require a copy " + _
                             "of your Pre-Settled or Settled status; without this, you will not be able to work in the UK. For more information " + _
                             "about how you can obtain your status, please call the Compliance Team on <span  style=""color: #800080;"">0800 1234 5678</span> or email us at " + _
-                            "xxxx" + "</p>"
+                            "xxxx" + "</p></div>"
                         
                         Case "ROW Passport"
                             .htmlbody = .htmlbody + _
-                            "<h3><u>Non-EU Passport</u></h3><p>Your Passport is about to expire. It is a legal requirement that you update this and " + _
-                            "send us a clear copy of your renewed Passport. Please may you send this to xxxx" + "</p>"
+                            "<div><h3><u>Non-EU Passport</u></h3><p>Your Passport is about to expire. It is a legal requirement that you update this and " + _
+                            "send us a clear copy of your renewed Passport. Please may you send this to xxxx" + "</p></div>"
                         
                         Case "UK Passport"
                             .htmlbody = .htmlbody + _
-                            "<h3><u>UK Passport</u></h3><p>Your Passport is about to expire. It is a legal requirement that you update this and " + _
-                            "send us a clear copy of your renewed Passport. Please may you send this to xxxx" + "</p>"
+                            "<div><h3><u>UK Passport</u></h3><p>Your Passport is about to expire. It is a legal requirement that you update this and " + _
+                            "send us a clear copy of your renewed Passport. Please may you send this to xxxx" + "</p></div>"
                         
                         Case "DVLA"
                             dvla = True
                             .htmlbody = .htmlbody + _
-                            "<h3><u>DVLA</u></h3><p>We require a copy of your driving licence, please may you email this to us - " + _
-                            "xxxx." + "</p>"
+                            "<div><h3><u>DVLA</u></h3><p>We require a copy of your driving licence, please may you email this to us - " + _
+                            "xxxx." + "</p></div>"
                         
                         Case "Visa"
                             .htmlbody = .htmlbody + _
-                            "<h3><u>Visa</u></h3><p>Your Visa is about to expire. It is a legal requirement that you update this " + _
-                            "and send us a clear copy of your renewed Visa. Please may you send this to xxxx." + "</p>"
+                            "<div><h3><u>Visa</u></h3><p>Your Visa is about to expire. It is a legal requirement that you update this " + _
+                            "and send us a clear copy of your renewed Visa. Please may you send this to xxxx." + "</p></div>"
 
                         Case "ID Badge"
                             .htmlbody = .htmlbody + _
-                            "<h3><u>ID Badge</u></h3><p>Your ID badge is only valid for one year and your current one is expiring. " + _
+                            "<div><h3><u>ID Badge</u></h3><p>Your ID badge is only valid for one year and your current one is expiring. " + _
                             "You will shortly receive a new valid ID badge in the post (if your address has changed within the " + _
-                            "last 12 months, please inform the compliant team asap on <span  style=""color: #800080;"">0800 1234 5678</span> or email them at " + _
-                            "xxxx)." + "</p>"
+                            "last 12 months, please inform the compliance team asap on <span  style=""color: #800080;"">0800 1234 5678</span> or email them at " + _
+                            "xxxx)." + "</p></div>"
                             
                             errorList = errorList + full_name + " has an out of date ID Badge on RDB." + vbCrLf
                             
                         Case "YMCA"
                             .htmlbody = .htmlbody + _
-                            "<h3><u>YMCA - Prevention & Management of Bad Dancing Certificate</u></h3><p>We " + _
+                            "<div><h3><u>YMCA - Prevention & Management of Bad Dancing Certificate</u></h3><p>We " + _
                             "require an up to date YMCA training certificate from you. If you have completed a course elsewhere, " + _
                             "may you email this to xxxx. " + _
                             "If you haven't completed this course within the last year, we will happily book you into a course. Please " + _
-                            "may you call our Compliance Team on 0800 1234 5678 so that we can arrange this." + "</p>"
+                            "may you call our Compliance Team on 0800 1234 5678 so that we can arrange this." + "</p></div>"
 
                         Case Else
                                
@@ -389,33 +389,33 @@ Sub CreateEmails_Click()
                 
                 If training > 0 Then
                     .htmlbody = .htmlbody + _
-                    "<h3><u>Mandatory Training</u></h3><p>Your mandatory training is about to expire. If you have completed your " + _
+                    "<div><h3><u>Mandatory Training</u></h3><p>Your mandatory training is about to expire. If you have completed your " + _
                     "training for Moving & Handling, Basic Life Support or any other training elsewhere, please may you " + _
                     "forward these to us at xxxx. Alternatively we will pay and book you into " + _
                     "various on-line courses or practical training courses close to your house, so please get in contact with us " + _
-                    "ASAP on 0800 1234 5678 or email us at xxxx" + "</p>"
+                    "ASAP on 0800 1234 5678 or email us at xxxx" + "</p></div>"
                     
                 End If
 
                 If proofs > 0 Then
                     .htmlbody = .htmlbody + _
-                    "<h3><u>Proof of Address</u></h3><p>We require two proofs of your address, this can be Utility Bills, Bank Statements, Council Tax " + _
+                    "<div><h3><u>Proof of Address</u></h3><p>We require two proofs of your address, this can be Utility Bills, Bank Statements, Council Tax " + _
                     "Bill, Letter from HMRC / Job Centre or your Driving Licence. Please may you email us a clear copy of two Proofs of Addresses to " + _
-                    "xxxx." + "</p>"
+                    "xxxx." + "</p></div>"
 
                 End If
 
                 If refs > 0 Then
                     .htmlbody = .htmlbody + _
-                    "<h3><u>Professional References</u></h3><p>Annually we have to renew your references, therefore we require two professional references " + _
+                    "<div><h3><u>Professional References</u></h3><p>Annually we have to renew your references, therefore we require two professional references " + _
                     "for you. Please may you provide us with the full name of the referee, their position, their place of work, their email " + _
-                    "address and their contact telephone number. Please may you email this information to xxxx" + "</p>"
+                    "address and their contact telephone number. Please may you email this information to xxxx" + "</p></div>"
 
                 End If
                 
                 ' Add footer signiature to the message
-                .htmlbody = .htmlbody + "<p>Kind regards,<br><br><br>" + _
-                "<b><span  style=""color: #672983;"">The Compliance Team</span><br><span  style=""color: #0399A3;"">xxxx Company</span><br><br>Tel <span  style=""color: #672983;"">0800 1234 5678</span><br>Email compliance@xxxxcompany.co.uk<br>Web <span  style=""color: #672983;"">www.xxxxcompany.co.uk</span></b><br><br></p>"
+                .htmlbody = .htmlbody + "<p><br>Kind regards,<br><br><br>" + _
+                "<b><span  style=""color: #672983;"">The Compliance Team</span><br><span  style=""color: #0399A3;"">xxxx Company</span><br><br><br>Tel <span  style=""color: #672983;"">0800 1234 5678</span><br>Email compliance@xxxxcompany.co.uk<br>Web <span  style=""color: #672983;"">www.xxxxcompany.co.uk</span></b><br><br></p>"
                 
                 .htmlbody = .htmlbody + "</HTML></BODY>"
                 
