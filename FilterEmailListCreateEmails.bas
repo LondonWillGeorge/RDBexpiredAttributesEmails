@@ -507,6 +507,10 @@ Public Function wordLetter(templateFile As String, bodyText As String, objWord A
    
    ' Debug.Print ("wordLetter type is " + Str(VarType(wordLetter)))
    ' wordLetter returns as string type (8) here..
+   
+   ' Set whole doc colour to black to be safe... worried without this, local colour set
+   ' may affect other parts of document
+   wordLetter.Range.Font.textColor.RGB = RGB(0, 0, 0)
 
     ' Must SET an object, can't just use = !
     ' Need put divs around each paragraph
