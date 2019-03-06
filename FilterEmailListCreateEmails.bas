@@ -511,6 +511,19 @@ Public Function wordLetter(templateFile As String, bodyText As String, objWord A
    ' Set whole doc colour to black to be safe... worried without this, local colour set
    ' may affect other parts of document
    wordLetter.Range.Font.textColor.RGB = RGB(0, 0, 0)
+   
+   Dim strDate As String: strDate = Format(Now(), "dddd, mmm d, yyyy")
+   wordLetter.Paragraphs.Add
+
+   Dim spaces As String: spaces = ""
+   For v = 1 To 110
+       spaces = spaces + " "
+   Next v
+   wordLetter.Paragraphs(1).Range.text = spaces + strDate
+   
+   ' This should work according to Docs as far as I see, but doesnt
+   ' wordLetter.Paragraphs(1).Format.Alignment = wdAlignParagraphRight
+   ' From SO, but syntax error: wordLetter.Paragraphs(1).ParagraphFormat.Alignment = wdAlignParagraphRight
 
     ' Must SET an object, can't just use = !
     ' Need put divs around each paragraph
