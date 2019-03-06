@@ -414,8 +414,8 @@ Sub CreateEmails_Click()
                 End If
                 
                 ' Add footer signiature to the message
-                .htmlbody = .htmlbody + "<p><br>Kind regards,<br><br><br>" + _
-                "<b><span  style=""color: #672983;"">The Compliance Team</span><br><span  style=""color: #0399A3;"">xxxx Company</span><br><br><br>Tel <span  style=""color: #672983;"">0800 1234 5678</span><br>Email compliance@xxxxcompany.co.uk<br>Web <span  style=""color: #672983;"">www.xxxxcompany.co.uk</span></b><br><br></p>"
+                .htmlbody = .htmlbody + "<div><p><br>Kind regards,<br><br><br>" + _
+                "<b><span  style=""color: #672983;"">The Compliance Team</span><br><span  style=""color: #0399A3;"">xxxx Company</span><br><br><br>Tel <span  style=""color: #672983;"">0800 1234 5678</span><br>Email compliance@xxxxcompany.co.uk<br>Web <span  style=""color: #672983;"">www.xxxxcompany.co.uk</span></b><br><br></p></div>"
                 
                 .htmlbody = .htmlbody + "</HTML></BODY>"
                 
@@ -519,6 +519,7 @@ Public Function wordLetter(templateFile As String, bodyText As String, objWord A
     
     Dim tagH3s As Object
     
+    ' Want all paragraphs in Word loaded file and in hard code to have div tags enclosing, then they're picked up properly here
     For Each div In tagdivs
         ' check if h3 is in div or just p, if just p it is in first main paragraph section.
         Set tagH3s = div.getElementsByTagName("h3")
