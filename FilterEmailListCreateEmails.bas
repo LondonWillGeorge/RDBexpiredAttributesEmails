@@ -530,7 +530,7 @@ Public Function wordLetter(templateFile As String, bodyText As String, objWord A
                     pct = wordLetter.Paragraphs.Count
                     With wordLetter.Paragraphs(pct).Range
                         .text = h3.innerText
-                        '.Font.textColor.RGB = RGB(143, 8, 201) ' Purple
+                        .Font.textColor.RGB = RGB(143, 8, 201) ' Purple
                         'brighten text a bit too
                         '.Font.textColor.Brightness = 0.4
                         .Font.Underline = True
@@ -549,6 +549,7 @@ Public Function wordLetter(templateFile As String, bodyText As String, objWord A
                         ' check inner text for footer unique substring, if yes call footer process function
                         Debug.Print ("tagp HTML: " + p.innerHTML)
                         .text = p.innerText
+                        .Font.textColor.RGB = RGB(0, 0, 0)
                         .Font.Underline = False
                         .Font.Bold = False
                     End With
