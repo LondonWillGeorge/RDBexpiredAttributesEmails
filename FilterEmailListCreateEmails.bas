@@ -284,7 +284,7 @@ Sub CreateEmails_Click()
                     ' Select case here would be best I think, set standard text string variable,
                     ' and add this in appropriate place in select case text for each attribute case.
 
-                    ' Being naughty for now, and adding strings as hard code here, TODO: save in JSON file or Word file, fix space processing problem with Word
+                    ' Being naughty for now, and adding strings as hard code here, TODO: save in JSON file or Word file
                     ' changing <br> tags to <p> now as got single line spacing working in body tag
                     
                     ' 5/3/19 NB The variable paragraphs are not picked up by HTML parser with <P><h3>...</h3>...</P> format despite Outlook not having problems with this format
