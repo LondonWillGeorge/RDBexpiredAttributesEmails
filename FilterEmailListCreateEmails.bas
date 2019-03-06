@@ -618,17 +618,9 @@ Public Function wordLetter(templateFile As String, bodyText As String, objWord A
    AttachCount = AttachCount + 1
    savePath = ThisWorkbook.path & "\Attachments\Letter" & Str(AttachCount) & ".docx"
    
-'   If Dir(savePath) <> "" Then
-'      ' First remove readonly attribute, if set
-'      SetAttr savePath, vbNormal
-'      ' Then delete the file
-'      Kill savePath ' this throws error on 2nd time this function called
-'   End If
-   
    ' SaveAs2 needs the FileFormat specified here as well as filepath to save. MS Docs refer FileFormat as optional
    ' but I'm guessing may be because wordLetter is string type object here? Something I don't understand about this fully..
    With wordLetter
-       ' .SaveAs2 Filename:=ThisWorkbook.path & "\Attachments\" & full_name & "-FinishedLetter.docx", FileFormat:=wdFormatDocumentDefault
        .SaveAs2 Filename:=savePath, FileFormat:=wdFormatDocumentDefault    ' this is docx format
        ' doesn't work: .SaveAs2 Filename:="C:\Users\PATH\TestLetterSaving.docx"
    End With
@@ -636,12 +628,7 @@ Public Function wordLetter(templateFile As String, bodyText As String, objWord A
    Debug.Print ("wordLetter just saved to: " + wordLetter.path + "\" + wordLetter.Name)
    
    Set html = Nothing
-   
-   ' Set nothing in calling function..
-   ' Set wordLetter = Nothing
-   ' brings up locked for editing message unless you close it each time,
-   ' because it's still open of course
-   ' wordLetter.Close
+
    
    Application.DisplayAlerts = True
 
