@@ -308,9 +308,9 @@ Sub CreateEmails_Click()
                 Dim btext As String: btext = .body
                 Dim endtext As String: endtext = "Eg can insert a message here for everybody in different formatting, like Happy Easter from xxxx! etc"
                 
-                ' Keep Excel file and template same folder, same level                
+                ' Keep Excel file and template same folder, same level
                 Dim attached As Object: attached = wordLetter(ThisWorkbook.path & "\Template.docx", btext, endtext)
-                .Attachments.Add ("C:\PATH\FinishedLetter.docx") '  (attached) doesnt work
+                .Attachments.Add (ThisWorkbook.path & "\FinishedLetter.docx") '  (attached) doesnt work
 
                 ' We can add files also like this
                 '.Attachments.Add ("C:\DBS\JoeBloggs.doc") but will need to be sure files in right path before you do!
@@ -403,7 +403,7 @@ Public Function wordLetter(templateFile As String, bodyText As String, endtext A
    ' SaveAs2 needs the FileFormat specified here as well as filepath to save. MS Docs refer FileFormat as optional
    ' but I'm guessing may be because wordLetter is string type object here? Something I don't understand about this fully..
    With wordLetter
-       .SaveAs2 Filename:="C:\Users\PATH\FinishedLetter.docx", FileFormat:=wdFormatDocumentDefault ' this is docx format
+       .SaveAs2 Filename:=ThisWorkbook.path & "\FinishedLetter.docx", FileFormat:=wdFormatDocumentDefault  ' this is docx format
        ' doesn't work: .SaveAs2 Filename:="C:\Users\PATH\TestLetterSaving.docx"
    End With
    
