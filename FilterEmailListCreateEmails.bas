@@ -265,7 +265,8 @@ Sub CreateEmails_Click()
                 Dim btext As String: btext = .body
                 Dim endtext As String: endtext = "Eg can insert a message here for everybody in different formatting, like Happy Easter from xxxx! etc"
                 
-                Dim attached As Object: attached = wordLetter("C:\PATH\Template.docx", btext, endtext)
+                ' Keep Excel file and template same folder, same level                
+                Dim attached As Object: attached = wordLetter(ThisWorkbook.path & "\Template.docx", btext, endtext)
                 .Attachments.Add ("C:\PATH\FinishedLetter.docx") '  (attached) doesnt work
 
                 ' We can add files also like this
