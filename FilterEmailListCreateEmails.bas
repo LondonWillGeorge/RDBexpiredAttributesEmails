@@ -342,13 +342,15 @@ Public Function wordLetter(templateFile As String, bodyText As String) As Object
 
    objSelection.TypeText (bodyText)
    
-   ' wordLetter.SaveAs2 was
-   ' Failing to save here
    ' this is necessary to update Word file before saving
    ' Without it, file will be blank!
    objWord.Application.ScreenUpdating = True
-
+   ' objWord.Application.Visible = True ' removed but still shows save dialogue
+   
+   ' SaveAs2 needs the FileFormat specified here as well as filepath to save. MS Docs refer FileFormat as optional
+   ' but I'm guessing may be because wordLetter is string type object here? Something I don't understand about this fully..
        .SaveAs2 Filename:="C:\Users\PATH\FinishedLetter.docx", FileFormat:=wdFormatDocumentDefault ' this is docx format
+       ' doesn't work: .SaveAs2 Filename:="C:\Users\PATH\TestLetterSaving.docx"
    
    ' brings up locked for editing message unless you close it each time,
    ' because it's still open of course
