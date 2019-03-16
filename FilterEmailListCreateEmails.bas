@@ -236,6 +236,7 @@ Sub CreateEmails_Click()
                 
                 proofs = 0
                 refs = 0
+                training = 0
                 dvla = False
 
                 For colNum = 5 To 21
@@ -248,75 +249,143 @@ Sub CreateEmails_Click()
 
                     ' add text
                     cellValue = Cells(RowNum, colNum)
-                    docName = ""
+                    ' docName = ""
 
                     ' Select case here would be best I think, set standard text string variable,
                     ' and add this in appropriate place in select case text for each attribute case.
 
+                    ' Being naughty for now, and adding strings as hard code here, TODO: save in JSON file or Word file, fix space processing problem with Word
+                    ' changing <br> tags to <p> now as got single line spacing working in body tag
                     Select Case cellValue
                         Case "DBS"
-                            docName = "DBS (Disclosure and Barring Service) Enhanced certificate"
+                            .htmlbody = .htmlbody + _
+                            "<p><h3><u>DBS</u></h3>Your DBS needs updating. If you have moved address within the last 12 months, please may you " + _
+                            "provide us with your new full address and the date you moved into this address. If you registered with " + _
+                            "the DBS Update Service, please may you provide us with the hard copy of your DBS and the 16 digit disclosure " + _
+                            "number, so we can make relevant checks on-line. Please may you email this to xxxx" + "</p>"
+                            
                         Case "FTW"
-                            docName = "Fitness to Work certificate"
+                            .htmlbody = .htmlbody + _
+                            "<p><h3><u>(FTW) - Fitness to Work Certificate</u></h3>Every year we need to obtain a new FTW certificate for you. If your " + _
+                            "health has changed, please may you inform us at xxxx. If your circumstances haven't changed " + _
+                            "in the last 12 months, please do inform us, then we can apply for a new FTW certificate for you. If you work in an xxx area, " + _
+                            "do inform us (xxxx)." + "</p>"
+
                         Case "Appraisal"
-                            docName = "Appraisal document"
+                            .htmlbody = .htmlbody + _
+                            "<p><h3><u>Appraisal</u></h3>When you join xxxx, you will be required to have an appraisal within the first six " + _
+                            "months of joining us. Thereafter you will be required to have an appraisal annually. You are due an appraisal, so please may " + _
+                            "you call the Compliance Team on <span  style=""color: #800080;"">0800 1234 5678</span> and one of our xxxx will conduct an appraisal with you." + "</p>"
+
                         Case "BLS"
-                            docName = "Basic Life Support or Immediate Life Support Training Certificate"
+                            training = training + 1
+                        
                         Case "NMC"
-                            docName = "NMC Pin Check fee expiry document"
+                            ' passing at the moment
+                        
                         Case "Manual Handling"
-                            docName = "Manual Handling (Moving & Handling) Training Certificate"
+                            training = training + 1
+
                         Case "Proof Address1"
                             proofs = proofs + 1
+                            
                         Case "Proof Address2"
                             proofs = proofs + 1
+                            
                         Case "Ref1"
                             refs = refs + 1
+                            
                         Case "Ref2"
                             refs = refs + 1
+                            
                         Case "EU Passport"
-                            docName = "Passport or National ID Card"
+                            .htmlbody = .htmlbody + _
+                            "<p><h3><u>EU Passport & Right To Work in the UK (Brexit)</u></h3>Your Passport is about to expire. It is a " + _
+                            "legal requirement that you update this and send us a clear copy of your renewed Passport. Please may you send " + _
+                            "this to xxxx. If you're from the EU, from the 30th March 2019, we require a copy " + _
+                            "of your Pre-Settled or Settled status; without this, you will not be able to work in the UK. For more information " + _
+                            "about how you can obtain your status, please call the Compliance Team on <span  style=""color: #800080;"">0800 1234 5678</span> or email us at " + _
+                            "xxxx" + "</p>"
+                        
                         Case "ROW Passport"
-                            docName = "Passport"
+                            .htmlbody = .htmlbody + _
+                            "<p><h3><u>Non-EU Passport</u></h3>Your Passport is about to expire. It is a legal requirement that you update this and " + _
+                            "send us a clear copy of your renewed Passport. Please may you send this to xxxx" + "</p>"
+                        
                         Case "UK Passport"
-                            docName = "UK Passport"
+                            .htmlbody = .htmlbody + _
+                            "<p><h3><u>UK Passport</u></h3>Your Passport is about to expire. It is a legal requirement that you update this and " + _
+                            "send us a clear copy of your renewed Passport. Please may you send this to xxx" + "</p>"
+                        
                         Case "DVLA"
                             dvla = True
-                            docName = "DVLA"
+                            .htmlbody = .htmlbody + _
+                            "<p><h3><u>DVLA</u></h3>We require a copy of your driving licence, please may you email this to us - " + _
+                            "xxxx." + "</p>"
+                        
                         Case "Visa"
-                            docName = "UK visa or Residence Permit"
+                            .htmlbody = .htmlbody + _
+                            "<p><h3><u>Visa</u></h3>Your Visa is about to expire. It is a legal requirement that you update this " + _
+                            "and send us a clear copy of your renewed Visa. Please may you send this to xxxx." + "</p>"
 
                         Case "ID Badge"
-                            docName = ""
+                            .htmlbody = .htmlbody + _
+                            "<p><h3><u>ID Badge</u></h3>Your ID badge is only valid for one year and your current one is expiring. " + _
+                            "You will shortly receive a new valid ID badge in the post (if your address has changed within the " + _
+                            "last 12 months, please inform the compliant team asap on <span  style=""color: #800080;"">0800 1234 5678</span> or email them at " + _
+                            "xxxx)." + "</p>"
+                            
                             errorList = errorList + full_name + " has an out of date ID Badge on RDB." + vbCrLf
+                            
+                        Case "YMCA"
+                            .htmlbody = .htmlbody + _
+                            "<p><h3><u>YMCA - Prevention & Management of Bad Dancing Certificate</u></h3>We " + _
+                            "require an up to date YMCA training certificate from you. If you have completed a course elsewhere, " + _
+                            "may you email this to xxxx. " + _
+                            "If you haven't completed this course within the last year, we will happily book you into a course. Please " + _
+                            "may you call our Compliance Team on 0800 1234 5678 so that we can arrange this." + "</p>"
 
                         Case Else
-                            docName = ""
-                            errorList = errorList + full_name + " has an error with a document listed as " + cellValue + vbCrLf
+                               
+                               errorList = errorList + full_name + " has an error with a document listed as " + cellValue + vbCrLf
                     End Select
 
                     ' check for permission to work combination invalidities, and generate corresponding messages.
 
-                    ' .Body = .Body + vbCrLf + "    Your " + Cells(rowNum, colNum) + " is either due to expire soon or has expired. Please could you renew this and email us a clear photocopy as soon as possible, ideally within the next week, so we can continue to offer you shifts."
-                    If docName <> "" Then
-                        .body = .body + vbCrLf + "    Your " + docName + " is either due to expire very soon, or has expired. Please could you renew this and email us a clear photocopy as soon as possible, ideally within the next week, so we can continue to offer you shifts."
-                    End If
-
                 Next colNum
-
-                If proofs = 1 Then
-                    .body = .body + vbCrLf + "You have one proof of address missing. Please email us one of: a council tax letter, a bank statement, a current UK Driving License (DVLA)."
-                ElseIf proofs = 2 Then
-                    .body = .body + vbCrLf + "You have 2 proofs of address missing. Please email us two different documents from this list: a council tax letter, a bank statement, a current UK Driving License (DVLA)."
+                
+                If training > 0 Then
+                    .htmlbody = .htmlbody + _
+                    "<p><h3><u>Mandatory Training</u></h3>Your mandatory training is about to expire. If you have completed your " + _
+                    "training for Moving & Handling, Basic Life Support or any other training elsewhere, please may you " + _
+                    "forward these to us at xxxx. Alternatively we will pay and book you into " + _
+                    "various on-line courses or practical training courses close to your house, so please get in contact with us " + _
+                    "ASAP on 0800 1234 5678 or email us at xxxx" + "</p>"
+                    
                 End If
 
-                If refs = 1 Then
-                    .body = .body + vbCrLf + "You have one work reference missing or nearly out of date. We would be very grateful if you could ask any one of your current supervisors or managers to give you a reference and then email it back to us as soon as possible."
-                ElseIf refs = 2 Then
-                    .body = .body + vbCrLf + "You have both (2) of your work references missing or nearly out of date. We would be very grateful if you could ask any two of your current supervisors or managers to give you a reference and then email it back to us as soon as possible."
+                If proofs > 0 Then
+                    .htmlbody = .htmlbody + _
+                    "<p><h3><u>Proof of Address</u></h3>We require two proofs of your address, this can be Utility Bills, Bank Statements, Council Tax " + _
+                    "Bill, Letter from HMRC / Job Centre or your Driving Licence. Please may you email us a clear copy of two Proofs of Addresses to " + _
+                    "xxxx." + "</p>"
+
                 End If
 
-                .body = .body + vbCrLf + " In case you have a question about one of these documents, feel free to just email us in return." + vbCrLf + vbCrLf + "Warm regards and Happy xxxx from the xxxx Compliance Team"
+                If refs > 0 Then
+                    .htmlbody = .htmlbody + _
+                    "<p><h3><u>Professional References</u></h3>Annually we have to renew your references, therefore we require two professional references " + _
+                    "for you. Please may you provide us with the full name of the referee, their position, their place of work, their email " + _
+                    "address and their contact telephone number. Please may you email this information to xxxx" + "</p>"
+
+                End If
+                
+                ' Put Footer message here!
+                
+                
+                .htmlbody = .htmlbody + "</HTML></BODY>"
+
+                ' .body = .body + vbCrLf + " In case you have a question about one of these documents, feel free to just email us in return." + vbCrLf + vbCrLf + "Warm regards and Happy xxxx from the xxxx Compliance Team"
 
                 ' Open Word file object
                 ' Open template Word file for the letter
