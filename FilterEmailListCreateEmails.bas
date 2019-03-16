@@ -202,12 +202,9 @@ Sub CreateEmails_Click()
             On Error Resume Next
             With OutMail
                 .To = cell.Value
-                .Subject = "Urgent: Please Check your xxxx document" ' say compliance documents?
-
-                .body = "Dear " + firstName + "," + vbCrLf + vbCrLf + "We'd like to thank you again for your valued " + _
-                "contribution to (company name). We really want to continue to offer you as many shifts as we can, " + _
-                "so would be very grateful if you could check the following documents, which we think are out of date now for you."
-
+                .Subject = paragArray(0)
+                .body = emailMainText1(firstName, paragArray()) ' returns string with main text before variable text
+                
                 proofs = 0
                 refs = 0
                 dvla = False
