@@ -327,6 +327,7 @@ Public Function wordLetter(templateFile As String, bodyText As String) As Object
 
    ' objWord.Visible = False ' True will show the Word doc don't want that as have to click close each time!
    Debug.Print ("wordLetter type is " + Str(VarType(wordLetter)))
+   objWord.Application.ScreenUpdating = False ' 4 - still read-only message
 
    Set objSelection = objWord.Selection
 
@@ -338,7 +339,10 @@ Public Function wordLetter(templateFile As String, bodyText As String) As Object
    
    ' wordLetter.SaveAs2 was
    ' Failing to save here
-   objWord.SaveAs2 ("C:\PATH\TestLetterSaving.docx") ' Filename:="C:\PATH\TestLetterSaving.docx"
+   ' this is necessary to update Word file before saving
+   ' Without it, file will be blank!
+   objWord.Application.ScreenUpdating = True
+       .SaveAs2 Filename:="C:\Users\PATH\FinishedLetter.docx", FileFormat:=wdFormatDocumentDefault ' this is docx format
    
    ' brings up locked for editing message unless you close it each time,
    ' because it's still open of course
