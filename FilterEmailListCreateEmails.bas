@@ -262,8 +262,10 @@ Sub CreateEmails_Click()
                 ' Debug.Print (".body is " + .body)
                 
                 Dim btext As String: btext = .body
-                Dim attached As Object: attached = wordLetter("C:\PATH\template.docx", btext)
-                .Attachments.Add ("C:\PATH\TestLetterSaving.docx") '  (attached) doesnt work
+                Dim endtext As String: endtext = "Eg can insert a message here for everybody in different formatting, like Happy Easter from xxxx! etc"
+                
+                Dim attached As Object: attached = wordLetter("C:\PATH\Template.docx", btext, endtext)
+                .Attachments.Add ("C:\PATH\FinishedLetter.docx") '  (attached) doesnt work
 
                 ' We can add files also like this
                 '.Attachments.Add ("C:\DBS\JoeBloggs.doc") but will need to be sure files in right path before you do!
@@ -305,7 +307,7 @@ End Sub
 ' https://docs.microsoft.com/en-us/office/vba/api/word.document
 
 
-Public Function wordLetter(templateFile As String, bodyText As String) As Object
+Public Function wordLetter(templateFile As String, bodyText As String, endtext As String) As Object
 
    Dim objWord
 
