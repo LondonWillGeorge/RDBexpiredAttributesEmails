@@ -1,4 +1,6 @@
 Attribute VB_Name = "FilterEmailListCreateEmails"
+' May need to End 1st word task manually in Task Manager upon running the application
+
 Sub FilterEmailList_Click()
 
 ' set column width A to D
@@ -22,10 +24,12 @@ Set mailDict = New Scripting.Dictionary
 
 emailsLen = ActiveSheet.Range("a10000").End(xlUp).Row
 
+' populate dictionary type with all the names in this column
 For ind = 2 To emailsLen
     tempName = ""
-    
-    If Left(Cells(ind, 1), 3) = "PAY" Then
+    ' If the names begin with payroll number PAY, then space then first name then second name, split off first part
+    If Left(Cells(ind, 1), 2) = "PAY" Then
+
         For a = 1 To UBound(Split(Cells(ind, 1)))
             tempName = tempName + Split(Cells(ind, 1))(a) + " "
         Next a
@@ -74,7 +78,6 @@ For ind2 = 2 To finalsLen
             ReDim Preserve bestMatch(1, 0 To matchCount)
 
         End If
-    
 
     Next key
     ' decide best match key
@@ -118,11 +121,9 @@ Next ind2
 End Sub
 
 
-
-Sub CreateEmails_Click()
-   
 'Email generation base code from: http://www.rondebruin.nl/win/winmail/Outlook/tips.htm
 'Working in Office 2000-2016
+Sub CreateEmails_Click()
 
     Dim OutApp As Object
     Dim OutMail As Object
@@ -304,6 +305,8 @@ End Sub
 ' https://docs.microsoft.com/en-us/office/vba/api/word.document
 
 Public Function wordLetter(templateFile As String, bodyText As String, endtext As String) As Object
+' uncomment below if you want to debug file path later
+' Debug.Print ("template file path coming in to wordletter function as: " + templateFile)
 
    Dim objWord
 
