@@ -315,18 +315,14 @@ Public Function wordLetter(templateFile As String, bodyText As String) As Object
 
    Set objWord = CreateObject("Word.Application")
    
-   ' try here?
-   ' objWord.Visible = False
-   
    ' get rid of read only warning? 3 - added objWord. parent keyword, still r-o message
    objWord.Application.DisplayAlerts = False
 
    ' set visible false in parameters here?
    'Error at this line may have been due to not typing the input parameters before
-   Set wordLetter = objWord.Documents.Open(templateFile, Visible = False) ' Filename = templateFile, Visible = False
 
-   ' objWord.Visible = False ' True will show the Word doc don't want that as have to click close each time!
    'objWord.Application.Visible = False ' 2 - still read-only message
+   
    objWord.Application.ScreenUpdating = False ' 4 - still read-only message
    
    ' 1 - read-only message still appears on execution of this line:
@@ -351,6 +347,7 @@ Public Function wordLetter(templateFile As String, bodyText As String) As Object
    ' this is necessary to update Word file before saving
    ' Without it, file will be blank!
    objWord.Application.ScreenUpdating = True
+
        .SaveAs2 Filename:="C:\Users\PATH\FinishedLetter.docx", FileFormat:=wdFormatDocumentDefault ' this is docx format
    
    ' brings up locked for editing message unless you close it each time,
