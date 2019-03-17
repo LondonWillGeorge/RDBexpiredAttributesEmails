@@ -398,7 +398,29 @@ Sub CreateEmails_Click()
                 Dim btext As String: btext = .body
                 Dim endtext As String: endtext = "Eg can insert a message here for everybody in different formatting, like Happy Easter from xxxx! etc"
                 
-                ' Keep Excel file and template same folder, same level
+                ' For the attachment, try to parse the whole htmlbody string as HTML..
+                Dim html As HTMLDocument ' as new maybe not the best as late binding better?
+                ' html = create...
+                Set html = CreateObject("htmlfile")
+                html.body.innerHTML = .htmlbody
+                
+                ' Debug.Print (html.body.innerHTML)
+                
+                ' Must SET an object, can't just use = !
+                ' Need put divs around each paragraph?
+                ' Dim tagas As Object: Set tagas = html.getElementsByTagName("a")
+                Dim tagps As Object: Set tagps = html.getElementsByTagName("p")
+                
+                For Each tagp In tagps
+                    ' Will be para on own, or have h3 heading tag inside at top
+                    ' some have <a> tags around the web address, remove tags and replace with hyperlink in Word doc
+                    
+                Next tagp
+                
+'                For Each y In tagas
+'                    Debug.Print ("A tag is: " + y.innerText + y.href)
+'                Next y
+                
                 Dim attached As Object: attached = wordLetter(ThisWorkbook.path & "\Template.docx", btext, endtext)
                 .Attachments.Add (ThisWorkbook.path & "\FinishedLetter.docx") '  (attached) doesnt work
 
