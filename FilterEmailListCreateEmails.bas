@@ -204,7 +204,7 @@ Sub CreateEmails_Click()
     'Start processing the emails here:
     For Each cell In ActiveSheet.Columns("C").Cells.SpecialCells(xlCellTypeConstants)
         
-        ' *** FOR TESTING, STOP AT ROW 4, COMMENT OUT LATER!!!! ****
+        ' *** FOR TESTING, STOP AT ROW 4, COMMENT OUT LATER!!!! 4 March 10:30 ran with 20 OK ****
         If cell.Row > 4 Then
             Exit For
         End If
@@ -395,7 +395,7 @@ Sub CreateEmails_Click()
                 ' display email still
                 ' Debug.Print (".body is " + .body)
                 
-                Dim btext As String: btext = .body
+                Dim btext As String: btext = .htmlbody ' .body
                 Dim endtext As String: endtext = "Eg can insert a message here for everybody in different formatting, like Happy Easter from xxxx! etc"
                 
                 ' For the attachment, try to parse the whole htmlbody string as HTML..
