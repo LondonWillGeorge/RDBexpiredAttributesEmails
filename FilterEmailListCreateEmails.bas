@@ -380,48 +380,15 @@ Sub CreateEmails_Click()
 
                 End If
                 
-                ' Put Footer message here!
+                ' ************************* Put Footer message here!
                 
                 
                 .htmlbody = .htmlbody + "</HTML></BODY>"
-
-                ' .body = .body + vbCrLf + " In case you have a question about one of these documents, feel free to just email us in return." + vbCrLf + vbCrLf + "Warm regards and Happy xxxx from the xxxx Compliance Team"
-
-                ' Open Word file object
-                ' Open template Word file for the letter
-                ' Add the text - ie for now add .Body to this file text in the right place
-                ' Save this to a new file name like FilledLetter.docx
-                ' Attach FilledLetter.docx
-                ' display email still
-                ' Debug.Print (".body is " + .body)
                 
                 Dim btext As String: btext = .htmlbody ' .body
-                Dim endtext As String: endtext = "Eg can insert a message here for everybody in different formatting, like Happy Easter from xxxx! etc"
-                
-                ' For the attachment, try to parse the whole htmlbody string as HTML..
-                Dim html As HTMLDocument ' as new maybe not the best as late binding better?
-                ' html = create...
-                Set html = CreateObject("htmlfile")
-                html.body.innerHTML = .htmlbody
-                
-                ' Debug.Print (html.body.innerHTML)
-                
-                ' Must SET an object, can't just use = !
-                ' Need put divs around each paragraph?
-                ' Dim tagas As Object: Set tagas = html.getElementsByTagName("a")
-                Dim tagps As Object: Set tagps = html.getElementsByTagName("p")
-                
-                For Each tagp In tagps
-                    ' Will be para on own, or have h3 heading tag inside at top
-                    ' some have <a> tags around the web address, remove tags and replace with hyperlink in Word doc
-                    
-                Next tagp
-                
-'                For Each y In tagas
-'                    Debug.Print ("A tag is: " + y.innerText + y.href)
-'                Next y
-                
-                Dim attached As Object: attached = wordLetter(ThisWorkbook.path & "\Template.docx", btext, endtext)
+                ' Dim endtext As String: endtext = "Eg can insert a message here for everybody in different formatting, like Happy Easter from xxxx! etc"
+                                
+                Dim attached As Object: attached = wordLetter(ThisWorkbook.path & "\Template.docx", btext)
                 .Attachments.Add (ThisWorkbook.path & "\FinishedLetter.docx") '  (attached) doesnt work
 
                 ' We can add files also like this
@@ -460,9 +427,19 @@ End Sub
 
 ' https://docs.microsoft.com/en-us/office/vba/api/word.document
 
-Public Function wordLetter(templateFile As String, bodyText As String, endtext As String) As Object
-' uncomment below if you want to debug file path later
-' Debug.Print ("template file path coming in to wordletter function as: " + templateFile)
+Public Function wordLetter(templateFile As String, bodyText As String) As Object
+
+    ' For the attachment, try to parse the whole htmlbody string as HTML..
+    Dim html As HTMLDocument ' as new maybe not the best as late binding better?
+    ' html = create...
+    Set html = CreateObject("htmlfile")
+    html.body.innerHTML = bodyText
+    ' Debug.Print (html.body.innerHTML)
+
+                
+'                For Each y In tagas
+'                    Debug.Print ("A tag is: " + y.innerText + y.href)
+'                Next y
 
    Dim objWord 'As Application declaring as application seems to generate obscure runtime errors?
 
@@ -488,27 +465,45 @@ Public Function wordLetter(templateFile As String, bodyText As String, endtext A
    
    ' TODO: Try setting objFont = objWord.Font as Selection may be not most stable according SO poster
    
-   '
+    ' Must SET an object, can't just use = !
+    ' Need put divs around each paragraph?
+    ' Dim tagas As Object: Set tagas = html.getElementsByTagName("a")
+    Dim tagps As Object: Set tagps = html.getElementsByTagName("p")
+    
+    For Each tagp In tagps
+        ' Will be para on own, or have h3 heading tag inside at top
+        ' some have <a> tags around the web address, remove tags and replace with hyperlink in Word doc
+        ' With ActiveDocument.Paragraphs(1).Range end with
+        ' ActiveDocument.Paragraphs.Add - This example adds a new paragraph mark at the end of the active document.
+        ' tagps.get... should also work
+        ' Paragraphs collection object starts at index 1 apparently? https://docs.microsoft.com/en-us/office/vba/api/word.paragraphs
+        ActiveDocument.Paragraphs.Add
+        pct = ActiveDocument.Paragraphs.Count
+        With ActiveDocument.Paragraphs(pct).Range
+            .typetext (tagp)
+        End With
+        
+    Next tagp
 
-   Set objSelection = objWord.Selection
-   
-   With objSelection.Font
-       .Bold = False
-       .colorIndex = wdBlack
-       .Name = "Verdana"
-       .Size = "11"
-       
-       objSelection.TypeText (bodyText)
-       
-       ' can change formatting for a uniform end text message
-       .Bold = True
-       .colorIndex = wdViolet ' not working apparently
-       ' doesnt work; object / properties confused I think - .TextColor.ForeColor.RGB = RGB(0, 100, 100)
-       .Size = "15"
-       
-       objSelection.TypeText (endtext)
-       
-   End With
+'   Set objSelection = objWord.Selection
+'
+'   With objSelection.Font
+'       .Bold = False
+'       .colorIndex = wdBlack
+'       .Name = "Verdana"
+'       .Size = "11"
+'
+'       objSelection.typetext (bodyText)
+'
+'       ' can change formatting for a uniform end text message
+'       .Bold = True
+'       .colorIndex = wdViolet ' not working apparently
+'       ' doesnt work; object / properties confused I think - .TextColor.ForeColor.RGB = RGB(0, 100, 100)
+'       .Size = "15"
+'
+'       objSelection.typetext (endtext)
+'
+'   End With
    
    ' this is necessary to update Word file before saving
    ' Without it, file will be blank!
