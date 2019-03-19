@@ -221,20 +221,13 @@ Sub CreateEmails_Click()
     
     Set objWordMessage = Nothing
     
-    ' index 0 in paragraph array should now be subject line,
-    ' each underlined title or paragraph is separate item in array
-    
-'    For a = 0 To UBound(paragArray)
-'        Debug.Print ("no " + Str(a) + " is: " + paragArray(a))
-'    Next a
-    
     ' on debugging, Word Quit execution hangs before break point execution,
     ' have to manually end task in Task Manager for some reason to get to the break point?
     
     'Start processing the emails here:
     For Each cell In ActiveSheet.Columns("C").Cells.SpecialCells(xlCellTypeConstants)
         
-        ' *** FOR TESTING, STOP AT ROW 4, COMMENT OUT LATER!!!! 4 March 10:30 ran with 20 OK ****
+        ' *** FOR TESTING, STOP AT ROW 4, COMMENT OUT LATER ****
         If cell.Row > 4 Then
             Exit For
         End If
@@ -602,8 +595,8 @@ Public Function wordLetter(templateFile As String, bodyText As String, objWord A
             End With
         Next a
         
-        Debug.Print ("instring comp team: " + Str(InStr(.text, "The Compliance Team"))) ' gives 18, so starts at 1, same as characters collection
-
+        ' Test how many times this string occurs in whole text, if decide to colour certain phrases same colour
+        Debug.Print ("instring comp team: " + Str(InStr(.text, "The Compliance Team")))
 
     End With
    
