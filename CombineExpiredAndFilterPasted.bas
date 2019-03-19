@@ -40,12 +40,14 @@ Sub CombineExpired_Click()
         namesArray(0) = Array("", "")
         
         sheetInd = 1
+        
+        ' "Mail List" sheet is generated from VBA, but even after manually deleting,
+        ' it can still be there even if not visible (bit strange this but using breakpoint confirmed), so explicitly delete here.
+        DeleteMailList
  
         For Each Ws In Worksheets
             
             ' sheet index starts at 1, not zero!
-            ' Worksheets.count returns number sheets
-            
             If Ws.Name <> "START" Then
                 WsNames(sheetInd) = Ws.Name
                 sheetInd = sheetInd + 1
@@ -242,16 +244,9 @@ Next a
 ' Sort by integer value, then remove any consecutively repeated integers
 ' ** sorting to remove duplicates bit tricky still with an array! should have used dictionary perhaps
 
-' TODO: test this below to delete existing Mail List sheet if there
-For Each Sheet In ActiveWorkbook.Worksheets
-     If Sheet.Name = "Mail List" Then
-     Application.DisplayAlerts = False
-     Sheet.Delete
-     Application.DisplayAlerts = True
-     End If
-Next Sheet
+DeleteMailList
 
-' Create new sheet "Mail List" 1 place to the right of DBS sheet
+' Create new sheet "Mail List" 1 place to the right of START sheet
 ' Populate Column C with final name list
 With ThisWorkbook
     .Sheets.Add(After:=.Sheets("START")).Name = "Mail List"
@@ -322,3 +317,13 @@ MsgBox (inactiveNames + "Total Number = " + CStr(inactiveCount))
 
 
 End Sub
+
+Private Function DeleteMailList()
+    For Each Sheet In ActiveWorkbook.Worksheets
+        If Sheet.Name = "Mail List" Then
+            Application.DisplayAlerts = False
+            Sheet.Delete
+            Application.DisplayAlerts = True
+        End If
+    Next Sheet
+End Function
