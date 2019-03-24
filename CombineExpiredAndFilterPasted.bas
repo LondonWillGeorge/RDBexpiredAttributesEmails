@@ -1,4 +1,3 @@
-Attribute VB_Name = "CombineExpiredAndFilterPasted"
 Sub CombineExpired_Click()
         
         Dim Ws As Worksheet

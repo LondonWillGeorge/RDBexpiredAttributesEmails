@@ -1,4 +1,3 @@
-Attribute VB_Name = "ListFolderNames"
 
 ' NB This module requires the Microsoft Scripting Runtime reference to have been added to this project.
 ' It should have been added already! But in case problem, add again from VBA Editor by clicking Tools menu
