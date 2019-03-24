@@ -175,47 +175,30 @@ For a = 2 To compLen
         ' if compLen cell is light blue colour, then name is inactive, so don't check
         ' use b=2 condition to only check once in this loop
             If cI = 33 Or cI = 8 Or cI = 20 Or cI = 28 Or cI = 34 Or cI = 41 Or cI = 42 Then
-                
-                ' Debug.Print ("Cell " + CStr(a) + " i.e. " + Cells(a, 7) + " is light blue, therefore inactive candidate, so we skip it")
-                
                 inactiveNames = inactiveNames + "Cell " + CStr(a) + " i.e. " + Cells(a, 7) + vbCrLf
                 inactiveCount = inactiveCount + 1
-                ' TODO: colour the name blue in H bit tricky as we don't have right H row at this point!
                 Exit For
             End If
         End If
-        
-
-        
-        ' TODO: actually within the inner b loop, we only want to match 1 candidate?
-        ' add .fuzz1 and .fuzz2 values, save as 2nd item in sub-array, then select higher score as the match
-        
+                
         Dim thisData As matchData
         thisData = MatchNHSnames(Cells(a, 7), Cells(b, 8))
         
         ' running this loop multiple times with each name from the comparison list, yes, because outer array same...
         If thisData.matched = True Then
-            ' to track simply which candidate, append row number of Column H to the resArray
-            
-            ' boolean flag this value of a as matched?
+            ' boolean flag this value of a as matched
             matchedFlag = True
-
             bestMatch(0, matchCount) = b
             ' so second item in first index of array holds match value to compare
             bestMatch(1, matchCount) = thisData.fuzz1 + thisData.fuzz2
             matchCount = matchCount + 1
             ReDim Preserve bestMatch(1, 0 To matchCount)
-            
-'            resArray(resLength) = b
-'            resLength = resLength + 1
-'            ReDim Preserve resArray(0 To resLength)
         End If
     
     Next b
 
     ' at end of b loop here, decide which is best match by iterating over, resetting to highest each time
     ' remember bestMatch() dies when next a is iterated
-    
     ' Only add item number a to the final array if there has been at least one match above
     ' the matchedFlag boolean keeps track of this
     If matchedFlag = True Then
@@ -226,12 +209,9 @@ For a = 2 To compLen
             If bestMatch(1, c) > matchValue Then
                 resArray(resLength) = bestMatch(0, c)
                 matchValue = bestMatch(1, c)
-'                Debug.Print (matchValue)
-'                Debug.Print (resArray(resLength))
             End If
         Next c
-        
-        ' add next blank space in the resArray for next match name
+        ' add a blank item in the resArray for next match name
         resLength = resLength + 1
         ReDim Preserve resArray(0 To resLength)
     End If
@@ -239,11 +219,8 @@ For a = 2 To compLen
 Next a
 
 ' resArray now holds all the correct row numbers
-
 ' But want to remove duplicate names from resArray in case there are any
 ' Sort by integer value, then remove any consecutively repeated integers
-' ** sorting to remove duplicates bit tricky still with an array! should have used dictionary perhaps
-
 DeleteMailList
 
 ' Create new sheet "Mail List" 1 place to the right of START sheet
@@ -252,7 +229,6 @@ With ThisWorkbook
     .Sheets.Add(After:=.Sheets("START")).Name = "Mail List"
 End With
 Worksheets("Mail List").Activate
-    
 
 ' Set column width 30 to accomodate email addresses and wrap text, set height whole sheet
 ActiveSheet.Range("A:D").ColumnWidth = 30
@@ -263,7 +239,6 @@ ActiveSheet.Rows(1).RowHeight = 100
 ' make top row green colour
 ActiveSheet.Rows(1).Interior.colorIndex = 43
 ActiveSheet.Cells(1, 4) = "Final Names to Email"
-
 
 ' Create Emails button in the new sheet
   Dim btn As Button
@@ -279,8 +254,6 @@ ActiveSheet.Cells(1, 4) = "Final Names to Email"
     End With
 
   Application.ScreenUpdating = True
-
-
 
 ' This populates Column D of the new sheet with the final names
 For resCount = 0 To resLength - 1
@@ -300,18 +273,6 @@ For resCount = 0 To resLength - 1
     Next colNum
     
 Next resCount
-
-' print number of inactive candidates to console
-
-' Debug.Print (CStr(inactiveCount) + " inactive names total in list")
-
-' debugging, need resLength - 1 as array begins at 0
-'resString = "Candidate row numbers: "
-'For resCount = 0 To resLength - 1
-'    resString = resString + CStr(resArray(resCount)) + ", "
-'Next resCount
-'
-'Debug.Print (resString)
 
 ' print number of inactive candidates in Message Box, TODO: keep msg box, also save this to a file
 MsgBox (inactiveNames + "Total Number = " + CStr(inactiveCount))
