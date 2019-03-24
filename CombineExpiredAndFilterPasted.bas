@@ -313,6 +313,7 @@ Next resCount
 '
 'Debug.Print (resString)
 
+' print number of inactive candidates in Message Box, TODO: keep msg box, also save this to a file
 MsgBox (inactiveNames + "Total Number = " + CStr(inactiveCount))
 
 
