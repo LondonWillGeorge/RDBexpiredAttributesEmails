@@ -1,7 +1,9 @@
 ' Option Explicit
-' May need to End 1st word task manually in Task Manager upon running the application
 Dim AttachCount As Integer
 
+' Filters from a (large) separate list of all candidate names and emails,
+' displaying correct email next to correct candidate name,
+' using fuzzy match functions, as email list data may be from a different source with name spelling variations
 Sub FilterEmailList_Click()
 
 ' set column width A to D
@@ -9,7 +11,7 @@ ActiveSheet.Range("A:D").ColumnWidth = 30
 
 ' Split off the Payroll string from beginning of name list, if this has such numbers/letters
 ' If the namelist is later 'pure' just names, this part shouldn't matter as it just checks the beginning for
-' (example) "PAY" characters which Payroll numbers start with
+' (in this example) "PAY" characters which Payroll numbers start with
 ' ***********
 ' 6 Feb 2019 Will's comment: actually using dictionary no advantage to using array in the end, because of fuzzy match problem!
 ' Split Column A names row by row, adding each to Dictionary mailDict as we go
@@ -23,15 +25,18 @@ ActiveSheet.Range("A:D").ColumnWidth = 30
 Dim mailDict As Scripting.Dictionary
 Set mailDict = New Scripting.Dictionary
 
+' find last cell in list of candidate names with corresponding email addresses
 emailsLen = ActiveSheet.Range("a10000").End(xlUp).Row
 
 ' Set attachment count, used to name attachment files differently
+' TODO: either change the file name using candidate name to name files differently, or use same file just change content re-save each time
+' actually nobody will care much if there is a number like "75" in the attached file name, but for SME recruitment company, receiver won't care
 AttachCount = 0
 
-' populate dictionary type with all the names in this column
+' populate dictionary type with all the names in the email list column (Key) and an Integer (Value)
 For ind = 2 To emailsLen
     tempName = ""
-    ' If the names begin with payroll number PAY, then space then first name then second name, split off first part
+    ' CHANGE THIS EXAMPLE TO SUIT: If the names begin with payroll number PAY, then space then first name then second name, split off first part
     If Left(Cells(ind, 1), 2) = "PAY" Then
 
         For a = 1 To UBound(Split(Cells(ind, 1)))
@@ -45,27 +50,22 @@ For ind = 2 To emailsLen
 
 Next ind
 
-Debug.Print ("OK, here comes the dictionary:")
-
-Dim key As Variant
-For Each key In mailDict.Keys
-    'check match, remove key
-    Debug.Print key, mailDict(key)
-Next key
-
+' find the last cell in column D which should have the candidate names
 finalsLen = ActiveSheet.Range("d10000").End(xlUp).Row
 
-' iterate over ColumnD
+' Iterate over Column D candidate names, inner loop over mailDict dictionary of Column A names using fuzzy match functions,
+' populate Column C with the email corresponding to best match candidate name
 For ind2 = 2 To finalsLen
 
     matchedFlag = False
     matchCount = 0
     
     Dim bestMatch() As Integer
-    ' want string?
+    
     ReDim Preserve bestMatch(1, 0 To 0)
 
-    ' save the item integer value to bestMatch(0, x) not the key which is string wrong type!
+    ' save the item (integer) Value to bestMatch(0, x) not the Key which is a string - wrong type!
+    ' save ALL item values where the match score is high enough so that .matched Boolean is True
     For Each key In mailDict.Keys
     'check best match
         Dim thisData As matchData
@@ -84,9 +84,11 @@ For ind2 = 2 To finalsLen
         End If
 
     Next key
-    ' decide best match key
-    ' populate Column C row with correct email
-    ' remove best match key
+    
+    ' Cycle through all the values where .matched was True
+    ' choose the one with highest match value score
+    ' get the row number of this value, which was saved in 2-D array
+    ' populate Column C row with the email on this row
     If matchedFlag = True Then
         matchItem = bestMatch(0, 0)
         
@@ -97,8 +99,7 @@ For ind2 = 2 To finalsLen
                 matchValue = bestMatch(1, c)
             End If
         Next c
-        'Now decided final matchKey
-        'row with email is mailDict(matchKey)
+        
         rowNo = matchItem
         Cells(ind2, 3) = Cells(rowNo, 2)
         
@@ -106,10 +107,11 @@ For ind2 = 2 To finalsLen
 
 Next ind2
 
+  ' Create a new button on the Mail List sheet, for creating the emails (displaying or sending them)
   Dim btn As Button
   Application.ScreenUpdating = False
   Dim t As Range
-    ' specify create button in Mail List sheet not the active sheet, in case wrong sheet is active
+    ' specify Mail List sheet not just active sheet, in case user clicked to another sheet
     Set t = Worksheets("Mail List").Range(Cells(1, 3), Cells(1, 3))
     Set btn = ActiveSheet.Buttons.Add(t.Left + 10, t.Top + 10, (t.Width * 0.8), (t.Height * 0.8))
     With btn
@@ -134,21 +136,20 @@ End Sub
 
 ' https://stackoverflow.com/questions/27854534/how-do-i-insert-html-to-word-using-vba
 ' try getelementbyid or similar on the .htmlbody string
+
+' Creates emails to all the candidates on Mail List sheet who have email address next to their name now
+' I.e. if method at end set to .display, it shows all the emails, if .send, it just sends them all
 Sub CreateEmails_Click()
 
     Dim OutApp As Object
     Dim OutMail As Object
     Dim cell As Range
     
-    'As Application declaring as application seems to generate obscure runtime errors?
+    ' Declaring As Application seems to generate obscure runtime errors?
     Dim objWord As Object ' passed to attachment create function, declaring as object now
-    
-    ' Set objWord = CreateObject("Word.Application") ' NB this is NOT yet set to Nothing at the end, but still works...
-    On Error Resume Next
-    Set objWord = GetObject(, "Word.Application")
-    If Err.Number > 0 Then Set objWord = CreateObject("Word.Application")
-    On Error GoTo 0
-   ' Where is 0 here? Don't want to repeat html object creation?
+        
+    ' Reset module scope variable for number of attachments
+    AttachCount = 0
 
     Application.ScreenUpdating = False
     Set OutApp = CreateObject("Outlook.Application")
@@ -158,38 +159,14 @@ Sub CreateEmails_Click()
     Dim errorList As String: errorList = ""
 
     If Cells(2, 3) <> "" Then
-    
-    ' Open Word object and file ONCE for the Message Body, and save the text in several variables, only one format type in each text variable.
-    ' Close it after variable text is saved. So we need to save the text variables BEFORE we start looping...
-    Dim messagePath As String: messagePath = ThisWorkbook.path & "\MessageText.docx"
-    
-    Dim paragArray() As String
-    ReDim Preserve paragArray(0 To 0)
-    
+        
+    ' This is used to open and read in file introHTML with the generic intro text at moment
+    ' Afterwards the objWordMessage is destroyed
     Dim objWordMessage As Object: Set objWordMessage = CreateObject("Word.Application")
     ' objWordMessage.Visible = False
     objWordMessage.Application.DisplayAlerts = False
     objWordMessage.Application.ScreenUpdating = False
-    
-'    Dim msgDoc As Object: Set msgDoc = objWordMessage.Documents.Open(messagePath, Visible = False, ReadOnlyRecommended = False)
-'    ' check path and show mgbox if path has no file
-'
-'    Set colParagraphs = msgDoc.Paragraphs
-'    paraCount = 0
-'    For Each objParagraph In colParagraphs
-'
-'        ' Debug.Print ("parag text is: " + objParagraph.Range.text)
-'        lineText = Trim(objParagraph.Range.text)
-'        If Trim(lineText) <> "" Then ' Trimming again here still gives blank items between!
-'           ' add to the text string array here
-'           paragArray(paraCount) = lineText
-'           paraCount = paraCount + 1
-'           ReDim Preserve paragArray(0 To paraCount)
-'        End If
-'    Next
-'
-'    msgDoc.Close
-    
+        
     ' TODO: Find way to put ALL of text in Word files and load in without mangling the HTML, or even load directly from Word and convert into HTML
     ' maybe someone wrote VBA module to do this already?
     Dim introPath As String: introPath = ThisWorkbook.path & "\MessageIntroHTML.docx"
@@ -199,37 +176,22 @@ Sub CreateEmails_Click()
     Dim introHTML As String: introHTML = introDoc.Range.text
     
     introDoc.Close
-    
     Set introDoc = Nothing
-    
-'  Footer is so short, leaving it in hard code for now
-'    ' Same for the footer for now, TODO: shorten to one set commands, and ideally one document
-'    Dim footerPath As String: footerPath = ThisWorkbook.path & "\MessageFooterHTML.docx"
-'
-'    Dim footerDoc As Object: Set footerDoc = objWordMessage.Documents.Open(footerPath, Visible = False, ReadOnlyRecommended = False)
-'
-'    Dim footerHTML As String: footerHTML = footerDoc.Range.text
-'
-'    footerDoc.Close
-'
-'    Set footerDoc = Nothing
     
     ' The .Quit line closes the Word process in Windows Task Manager - crucial!
     ' Setting object to Nothing without this will still NOT end the Word Task
     objWordMessage.Quit
-    
     Set objWordMessage = Nothing
     
-    ' on debugging, Word Quit execution hangs before break point execution,
-    ' have to manually end task in Task Manager for some reason to get to the break point?
+    ' Footer is short and varied formatting inside it, so leaving it in hard code for now
     
     'Start processing the emails here:
     For Each cell In ActiveSheet.Columns("C").Cells.SpecialCells(xlCellTypeConstants)
         
-        ' *** FOR TESTING, STOP AT ROW 4, COMMENT OUT LATER ****
-        If cell.Row > 4 Then
-            Exit For
-        End If
+'        *** FOR TESTING with .display which is much slower than .send, STOP AT ROW 4 ****
+'        If cell.Row > 4 Then
+'            Exit For
+'        End If
         
         ' save the row number of the current candidate for use in this loop
         RowNum = cell.Row
@@ -237,15 +199,15 @@ Sub CreateEmails_Click()
         ' Get first name only from name string, so we can address them by first name.
         firstName = Split(full_name, " ")(0)
         
+        ' VBA regex for email address from Ron DeBruin website
         If cell.Value Like "?*@?*.?*" Then
             Set OutMail = OutApp.CreateItem(0)
             On Error Resume Next
             With OutMail
                 .Importance = 2
                 .To = cell.Value
-                .Subject = "Urgent: Your xxxx Company Compliance Documents are Expiring!" ' paragArray(0)
-                ' .body = emailMainText1(firstName, paragArray()) ' returns string with main text before variable text
-                
+                .Subject = "Urgent: Your xxxx Company Compliance Documents are Expiring!"
+                ' set email body to HTML format
                 .BodyFormat = olFormatHTML
                 
                 ' Ron De Bruin's website again: remember need "" double quotes inside the HTML style tags for them to be read,
@@ -261,26 +223,14 @@ Sub CreateEmails_Click()
                 training = 0
                 dvla = False
 
+                ' iterate to right until empty, and add the text to .htmlbody
+                ' Being naughty for now, and adding strings as hard code here, TODO: as above, find way to separate logic/data better
+                ' 5/3/19 NB The variable paragraphs are not picked up by HTML parser with <P><h3>...</h3>...</P> format despite Outlook not having problems with this format
+                ' So change to <h3>..</h3><p>...</p> seems to be picked up properly then
                 For colNum = 5 To 21
-                ' iterate to right until empty, add the text to .htmlbody
-'                    If Trim(Cells(RowNum, colNum)) = "" Then
-'                        Exit For
-'                    ElseIf colNum = 5 Then
-'                        .Subject = .Subject + "s"
-'                    End If
-
-                    ' add text
+                
                     cellValue = Cells(RowNum, colNum)
-                    ' docName = ""
 
-                    ' Select case here would be best I think, set standard text string variable,
-                    ' and add this in appropriate place in select case text for each attribute case.
-
-                    ' Being naughty for now, and adding strings as hard code here, TODO: save in JSON file or Word file
-                    ' changing <br> tags to <p> now as got single line spacing working in body tag
-                    
-                    ' 5/3/19 NB The variable paragraphs are not picked up by HTML parser with <P><h3>...</h3>...</P> format despite Outlook not having problems with this format
-                    ' So change to <h3>..</h3><p>...</p> seems to be picked up properly then
                     Select Case cellValue
                         Case "DBS"
                             .htmlbody = .htmlbody + _
@@ -375,7 +325,8 @@ Sub CreateEmails_Click()
                                errorList = errorList + full_name + " has an error with a document listed as " + cellValue + vbCrLf
                     End Select
 
-                    ' check for permission to work combination invalidities, and generate corresponding messages.
+                    ' TODO: check for specific permission to work combination invalidities, and generate corresponding messages.
+                    ' This depends on specific compliance rules and probably complex to check exhaustively
 
                 Next colNum
                 
@@ -417,37 +368,37 @@ Sub CreateEmails_Click()
                 ' Doing it here avoids btext passing them into the attachment function, also it's neater code
                 .htmlbody = Replace(.htmlbody, "compliance@xxxxcompany.co.uk", "<span  style=""color: #0399A3;"">compliance@xxxxcompany.co.uk</span>")
 
-                ' "Template.docx" keep Excel file and template same folder, same level
-
+                ' "Template.docx" keep this Excel file and template in same folder, at same level
                 Dim attached As Object: attached = wordLetter(ThisWorkbook.path & "\Template.docx", btext, objWord)
-                
-                ' Print doesn't work because attached is Nothing at this point Locals window shows, I don't know why yet trying to return it as the wordLetter Word object
+                ' Print doesn't work because attached Object is Nothing at this point Locals window shows, despite above line executing.
+                ' I don't know why yet, trying to return it as the wordLetter Word object
                 ' Debug.Print ("attached doc path is: " + attached.document.path)
                 
-                savePath2 = ThisWorkbook.path & "\Attachments\FinishedLetter" & Str(AttachCount) & ".docx"
+                savePath2 = ThisWorkbook.path & "\Attachments\Letter" & Str(AttachCount) & ".docx"
                 
-                .Attachments.Add (savePath2)  '  (attached) doesnt work because it's Nothing
-                ' & "\Attachments\" & full_name & "-NextStepExpiringComplianceDocs.docx"
+                Debug.Print ("savePath2 is: " + savePath2)
                 
-                ' Trying to get rid of Locked for Editing message on Word file
+                .Attachments.Add (savePath2)  '  .Add(attached) doesnt work because it's Nothing
+                
+                ' avoid Locked for Editing message on Word file
                 Set attached = Nothing
                 attached.Close
                 
                 ' Would want error handling anyway on the file path, with message added to error list
-                .Display 'change to .Send will send the emails
+                .send 'change to .display, eg for testing, will show the emails then you can send manually.
             End With
             On Error GoTo 0
             Set OutMail = Nothing
 
         Else
-           ' MsgBox (cell.Value + " at cell " + CStr(cell.Address) + " is not a proper email address. Check it please!")
-           ' TODO: fix error list print to Word file
+           ' if here, their email address failed the regex test, so skipped creating the email, and now add this problem email to error list
            errorList = errorList + full_name + " at Row number " + CStr(RowNum) + " in the sheet had a problem with their email address or email doesn't exist, so no email was sent." + vbCrLf + vbCrLf
         End If
     Next cell
     
     End If
     
+' TODO: fix error list, print to Word file, it picks up empty cells as errors now
 ' Debug.Print (errorList)
 
 cleanup:
@@ -468,27 +419,21 @@ End Sub
 Public Function wordLetter(templateFile As String, bodyText As String, objWord As Object) As Object
 
     ' For the attachment, try to parse the whole htmlbody string as HTML..
-    Dim html As HTMLDocument ' as new maybe not the best as late binding better?
-    ' html = create...
+    Dim html As HTMLDocument ' As New maybe not the best as late binding better?
     Set html = CreateObject("htmlfile")
     html.body.innerHTML = bodyText
-    ' Debug.Print (html.body.innerHTML)
-
-                
-'                For Each y In tagas
-'                    Debug.Print ("A tag is: " + y.innerText + y.href)
-'                Next y
+    Debug.Print ("bodyText is: " + vbCrLf + vbCrLf + bodyText)
 
    Dim objDoc
 
    Dim objSelection
    
-'   ' Set objWord = CreateObject("Word.Application") ' NB this is NOT yet set to Nothing at the end, but still works...
-'   On Error Resume Next
-'   Set objWord = GetObject(, "Word.Application")
-'   If Err.Number > 0 Then Set objWord = CreateObject("Word.Application")
-'   On Error GoTo 0
-'   ' Where is 0 here? Don't want to repeat html object creation?
+   ' objWord is NOT yet set to Nothing at the end, but still works...
+   On Error Resume Next
+   Set objWord = GetObject(, "Word.Application")
+   If Err.Number > 0 Then Set objWord = CreateObject("Word.Application")
+   On Error GoTo 0
+   ' Copied from an Excel website: From Docs, GoTo 0 disables the error handler, doesn't go to "line 0", TODO: try catch is better
    
    objWord.Application.DisplayAlerts = False
    
@@ -500,10 +445,10 @@ Public Function wordLetter(templateFile As String, bodyText As String, objWord A
    ' Debug.Print ("wordLetter type is " + Str(VarType(wordLetter)))
    ' wordLetter returns as string type (8) here..
    
-   ' Set whole doc colour to black to be safe... worried without this, local colour set
+   ' Set whole doc colour to black to be safe... seems without this, local colour set
    ' may affect other parts of document
    wordLetter.Range.Font.textColor.RGB = RGB(0, 0, 0)
-   
+      
    Dim strDate As String: strDate = Format(Now(), "dddd, mmm d, yyyy")
    wordLetter.Paragraphs.Add
 
@@ -515,7 +460,7 @@ Public Function wordLetter(templateFile As String, bodyText As String, objWord A
    
    ' This should work according to Docs as far as I see, but doesnt
    ' wordLetter.Paragraphs(1).Format.Alignment = wdAlignParagraphRight
-   ' From SO, but syntax error: wordLetter.Paragraphs(1).ParagraphFormat.Alignment = wdAlignParagraphRight
+   ' From Stack Overflow answer, but still syntax error anyway: wordLetter.Paragraphs(1).ParagraphFormat.Alignment = wdAlignParagraphRight
 
     ' Must SET an object, can't just use = !
     ' Need put divs around each paragraph
@@ -525,9 +470,9 @@ Public Function wordLetter(templateFile As String, bodyText As String, objWord A
     
     ' Need all paragraphs in Word loaded file and in hard code to have div tags enclosing, then they're picked up properly here
     For Each div In tagdivs
-        'reject the footer text by checking if "kind regards" is in it! bit hacky!
+        'skip the footer text by checking if "kind regards" is in it! bit hacky!
         If InStr(div.innerHTML, "Kind regards") = 0 Then
-            ' check if h3 is in div or just p, if just p it is in first main paragraph section.
+            ' check if h3 is in div or just p in div, if just p it is in first main paragraph section.
             Set tagH3s = div.getElementsByTagName("h3")
             If tagH3s.Length > 0 Then
                 For Each h3 In tagH3s
@@ -551,7 +496,6 @@ Public Function wordLetter(templateFile As String, bodyText As String, objWord A
                     wordLetter.Paragraphs.Add
                     pct = wordLetter.Paragraphs.Count
                     With wordLetter.Paragraphs(pct).Range
-                        ' check inner text for footer unique substring, if yes call footer process function
                         Debug.Print ("tagp HTML: " + p.innerHTML)
                         .text = p.innerText
                         .Font.textColor.RGB = RGB(0, 0, 0)
@@ -561,13 +505,15 @@ Public Function wordLetter(templateFile As String, bodyText As String, objWord A
                     Debug.Print ("got p inner text is: " + p.innerText)
                 Next p
             End If
-            
-            ' Keep so when testing, can see immediate window this is processing to here:
-            Debug.Print ("div content is: " + div.innerHTML + vbCrLf)
+            ' If testing, can see immediate window this is processing to here:
+            ' Debug.Print ("div content is: " + div.innerHTML + vbCrLf)
         End If
     Next div
     
-    ' print word footer here individually, otherwise too much of a brain fry with in-paragraph formatting
+    ' TODO: possible way, check inner text for footer unique substring, if yes call footer process function
+    
+    ' print word footer here individually, otherwise too much of a brain fry.
+    ' So far, to do with in-paragraph formatting I just see some headache like:
     ' get the character number of a string with Instr(string, substring) returns 0 if not, but if there,
     ' gives the character number first character is 1, then use this in Word range to format
     ' ActiveDocument.Range(ActiveDocument.Paragraphs(1).Range.Characters(5).Start, _
@@ -580,13 +526,12 @@ Public Function wordLetter(templateFile As String, bodyText As String, objWord A
         & vbCrLf & "Web www.xxxxcompany.co.uk"
         With .Font
             .Bold = True
-            'testing
             .textColor.RGB = RGB(143, 8, 201)
             '.textColor.Brightness = 0.4
         End With
         
-        'NB Characters collection doesnt work this way: With .Characters(1, 14)
-        ' Apply non-bold and black colour to "Kind regards," only
+        ' NB Characters collection doesnt work this way: With .Characters(1, 14)
+        ' Apply non-bold and black colour to "Kind regards," text only, which is right at beginning
         For a = 1 To 14
             With .Characters(a)
                 .Font.Bold = False
@@ -595,7 +540,7 @@ Public Function wordLetter(templateFile As String, bodyText As String, objWord A
         Next a
         
         ' Test how many times this string occurs in whole text, if decide to colour certain phrases same colour
-        Debug.Print ("instring comp team: " + Str(InStr(.text, "The Compliance Team")))
+        ' Debug.Print ("instring comp team: " + Str(InStr(.text, "The Compliance Team")))
 
     End With
    
@@ -603,8 +548,7 @@ Public Function wordLetter(templateFile As String, bodyText As String, objWord A
    ' Without it, file will be blank!
    objWord.Application.ScreenUpdating = True
    
-   ' DELETE the old file before resaving with SAME NAME
-   ' But this still doesn't work it seems remembering and numbering consecutive file names
+   ' Tried to delete the old file before resaving with SAME NAME
    ' Error if try save same name 2nd time around, cant find how to overwrite yet
    
    AttachCount = AttachCount + 1
@@ -614,14 +558,9 @@ Public Function wordLetter(templateFile As String, bodyText As String, objWord A
    ' but I'm guessing may be because wordLetter is string type object here? Something I don't understand about this fully..
    With wordLetter
        .SaveAs2 Filename:=savePath, FileFormat:=wdFormatDocumentDefault    ' this is docx format
-       ' doesn't work: .SaveAs2 Filename:="C:\Users\PATH\TestLetterSaving.docx"
    End With
-   
-   Debug.Print ("wordLetter just saved to: " + wordLetter.path + "\" + wordLetter.Name)
-   
+      
    Set html = Nothing
-
-   
    Application.DisplayAlerts = True
 
 End Function
