@@ -235,8 +235,8 @@ Sub CreateEmails_Click()
         RowNum = cell.Row
         full_name = Cells(RowNum, 4)
         ' Get first name only from name string, so we can address them by first name.
-        firstName = Split(Cells(RowNum, 4), " ")(0)
-    
+        firstName = Split(full_name, " ")(0)
+        
         If cell.Value Like "?*@?*.?*" Then
             Set OutMail = OutApp.CreateItem(0)
             On Error Resume Next
