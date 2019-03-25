@@ -1,5 +1,7 @@
 Option Explicit
 
+' Custom data type, which in VBA I need (good old VBA!) because I want to return matched bool of true or false, AND the actual values of both match functions
+' as later, want to compare match values of all True match strings, and select the highest value as the best match
 Type matchData
     matched As Boolean
     fuzz1 As Double
@@ -12,7 +14,7 @@ Dim i As Long
 Dim j As Long
 Dim Temp
 
-'Sort the Array A-Z
+' Sort the Array A-Z
 ' Will changed UCase indexes from (i) to (i)(0) and j to j 0
 For i = LBound(myArray) To UBound(myArray) - 1
     For j = i + 1 To UBound(myArray)
@@ -86,20 +88,6 @@ If intLen1 < 2 Or intLen2 < 2 Then
     Exit Function
 End If
 
-'----------------------------------------
-'-- Will's Addition to function here --
-' For each fuzzymatch part, ensure the LONGER name part is String2, because of the way fuzzymatch works..
-' Put this IN FUZZYMATCH FUNCTION!
-'----------------------------------------
-
-'    Dim TempString As String
-'    If intLen2 < intLen1 Then
-'        TempString = String1
-'        String1 = String2
-'        String2 = TempString
-'    End If
-
-
 intTotScore = 0                   'initialise total possible score
 intScore = 0                      'initialise current score
 
@@ -111,7 +99,7 @@ intScore = 0                      'initialise current score
 '    If intLen1 < intLen2 Then FuzzyAlg1 String2, String1, intScore, intTotScore
 'End If
 
-' ** TESTING
+' Will changed original algorithm from above, which appears to have supposed to ensure same result if longer string first or second
 If (Algorithm And 1) <> 0 Then
     If intLen1 < intLen2 Then
         FuzzyAlg1 String2, String1, intScore, intTotScore
@@ -128,7 +116,7 @@ End If
 '    If intLen1 < intLen2 Then FuzzyAlg2 String2, String1, intScore, intTotScore
 'End If
 
-
+' Will changed above to:
 If (Algorithm And 2) <> 0 Then
     If intLen1 < intLen2 Then
         FuzzyAlg2 String2, String1, intScore, intTotScore
@@ -186,8 +174,7 @@ Next intCurLen
 End Sub
 
 
-
-' Split bracket (RGN (RMN (HCA to right off name list,
+' Split bracket (... (... (... to right off name list,
 ' can't use general brackets as some names have eg bracket middle name!then trim trailing spaces
 ' Split strings into 2 parts - surname and forename(s)
 
@@ -199,14 +186,7 @@ Function MatchNHSnames(ByVal String1 As String, ByVal String2 As String) As matc
     Dim Name1(0 To 1) As String
     Dim Name2(0 To 1) As String
     
-'    ********* splitting brackets in calling function now...
-'    String1 = Split(String1, "(RGN")(0)
-'    String1 = Split(String1, "(RMN")(0)
-'    String1 = Split(String1, "(HCA")(0)
-'    String2 = Split(String2, "(RGN")(0)
-'    String2 = Split(String2, "(RMN")(0)
-'    String2 = Split(String2, "(HCA")(0)
-    ' Now whichever way round strings come in, split off the end where it says (RGN)_Spencer etc.
+    ' Now whichever way round strings come in, split off the end where it says (.... etc.
     String1 = Trim(String1)
     String2 = Trim(String2)
  
@@ -232,36 +212,23 @@ Function MatchNHSnames(ByVal String1 As String, ByVal String2 As String) As matc
     Name2(0) = Trim(Name2(0))
     
     ' *** OK splits 2 names correct now surname and forenames
-    ' Debug.Print ("Name2(0) is " + Name2(0) + " and Name2(1) is " + Name2(1))
-    
     ' Now we fuzzy compare Name1(0) with Name2(0), and fuzzy compare Name1(1) with Name2(1)
     ' Have now inserted string swap code into FuzzyMatch function itself
     ' so longer string is ensured as String2
     
-    ' Do 0.2 or above on first part of name, and 0.35 on surname OR 0.5 on whole name
+    ' Do 0.2 or above on first part of name, and 0.35 on surname TODO: OR 0.5 on whole name
     
-    ' ************ TESTING **************
-'    Debug.Print ("Karen AP with longer first fuzzy % = " + CStr(FuzzyPercent("Karen Heather Allen-Powlett", "Karen Allen-Powlett")))
-'    Debug.Print ("Karen AP with shorter first fuzzy % = " + CStr(FuzzyPercent("Karen Allen-Powlett", "Karen Heather Allen-Powlett")))
-
-    
-    ' with swapping names - now don't know which name is original column H name here
-    ' BUT we only want the H row integer anyway which is still same in calling function though?
+    ' now some names swapped round to get longer String2 - therefore no longer know which name is original column H name here
+    ' BUT we only need the unchanged H row integer anyway, which is still same in calling function though
     
     MatchNHSnames.fuzz1 = FuzzyPercent(Name1(0), Name2(0))
     MatchNHSnames.fuzz2 = FuzzyPercent(Name1(1), Name2(1))
-    'Debug.Print (CStr(MatchNHSnames.fuzz1))
     
     If MatchNHSnames.fuzz1 >= 0.2 And MatchNHSnames.fuzz2 >= 0.35 Then
         ' Debug.Print ("The name " + Name2(0) + " " + Name2(1) + " is coming as a match.")
-        ' MatchNHSnames = True
         MatchNHSnames.matched = True
     Else
-        ' MatchNHSnames = False
         MatchNHSnames.matched = False
     End If
-
-    
-    
     
 End Function
