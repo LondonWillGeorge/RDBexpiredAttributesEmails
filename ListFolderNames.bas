@@ -31,8 +31,7 @@ Sub PasteColumnG_ListfromFolderNames()
         Set fldParent = fso.GetFolder(path)
         If fldParent.SubFolders.Count > 0 Then
             For Each fldChild In fldParent.SubFolders
-            ' Debug.Print fldChild.Name
-            Sheets("START").Cells(gRow, 7) = fldChild.Name ' testing with Column H! which is 8
+            Sheets("START").Cells(gRow, 7) = fldChild.Name ' can test with Column H, which is 8
             gRow = gRow + 1
             Next
         Else
