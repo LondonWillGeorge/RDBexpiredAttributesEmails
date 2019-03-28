@@ -9,8 +9,9 @@ RDB Pronet is a popular recruitment industry software application.
 In the small company I worked (name not relevant), I made this Excel Desktop application in VBA to compile list of expired or soon expiring compliance documents, obtained from RDB Pronet database, for each candidate, then send out automated Outlook emails, with Word letter attachments.
 
 There is an Excel workbook here with example data, and the VBA code saved in this Workbook, names and emails auto-generated or made up in this example. Full instructions for use are in first sheet of the Workbook.
+To use, download Workbook, the two Word files for the template and HTML email intro; these will need to be saved same level in parent folder. Also you need to create an empty folder, "Attachments" to hold the email attachments, which at present are saved in consecutively numbered file names. After all the emails are sent, you can delete auto-generated attachments in the attachments folder. In future, would like to implement this as one Word file getting created and then edited each time in the loop, but still some conflict issue with closing and re-accessing same Word file here.
 
-The VBA code only was under source control.
+Source control is only applied to the VBA code, where I exported modules from Excel each time before new git commits.
 
 I.e. this uses the Excel, Outlook and Word object models in VBA. The email body is formatted in HTML, and the Word attachment uses the 
 slightly idiosyncratic formatting code dictated by the Word object model, eg formatting can be set at the paragraph level or at individual 
